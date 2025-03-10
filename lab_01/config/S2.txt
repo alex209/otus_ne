@@ -1,0 +1,117 @@
+
+!
+! Last configuration change at 15:07:25 UTC Mon Mar 10 2025
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname S2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ switchport access vlan 7
+ switchport mode access
+!
+interface Ethernet0/1
+ no shutdown
+ description to_S1
+ switchport trunk allowed vlan 3,4,7,8
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 8
+ switchport mode trunk
+!
+interface Ethernet0/2
+ no shutdown
+ switchport access vlan 7
+ switchport mode access
+!
+interface Ethernet0/3
+ no shutdown
+ switchport access vlan 7
+ switchport mode access
+!
+interface Ethernet1/0
+ no shutdown
+ switchport access vlan 7
+ switchport mode access
+!
+interface Ethernet1/1
+ no shutdown
+ switchport access vlan 7
+ switchport mode access
+!
+interface Ethernet1/2
+ no shutdown
+ switchport access vlan 7
+ switchport mode access
+!
+interface Ethernet1/3
+ no shutdown
+ description to_PC-B
+ switchport access vlan 4
+ switchport mode access
+!
+interface Vlan3
+ no shutdown
+ description MENAGEMENT
+ ip address 192.168.3.12 255.255.255.0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 192.168.3.1
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+!
+!
+end
