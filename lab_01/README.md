@@ -1,6 +1,7 @@
 # Лабораторная №1
 ## VLAN и маршрутизация между VLAN 
 
+### Исходные данные
 #### Топология сети
 ![](img/lab_01.png)
 
@@ -17,12 +18,12 @@
 
 
 #### Таблица VLAN
-
-|VLAN|Name|Intreface|
-|---|---|---|
-|3|Management|S1: VLAN 3|
-| |          |S2: VLAN 3|
-| |          |S1: e1/3  |
-|4|Operation|S2: e1/3|
-|7|ParkingLot| |
-|8|Native|n/a|
+|VLAN|Name      |Intreface               |
+|----|----------|------------------------|
+|3   |Management|S1: VLAN 3              |
+|    |          |S2: VLAN 3              |
+|    |          |S1: e1/3                |
+|4   |Operation |S2: e1/3                |
+|7   |ParkingLot|S1: e0/2-3, e1/0-2      |
+|    |          |S2: e0/0, e0/2-3, e1/0-2|
+|8   |Native    |n/a                     |
