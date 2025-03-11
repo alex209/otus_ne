@@ -35,6 +35,7 @@
 |7   |ParkingLot|S2: e0/0, e0/2-3, e1/0-2|
 |8   |Native    |n/a                     |
 
+---
 ### Этапы выполнения
 1. Создем необходимые VLAN на коммутаторах S1 и S2.
 
@@ -128,6 +129,7 @@ interface Ethernet0/1
  switchport trunk native vlan 8
  switchport mode trunk
 ```
+![](img/trunk_s1.png)
 S2
 ```
 !
@@ -139,6 +141,8 @@ interface Ethernet0/1
  switchport trunk native vlan 8
  switchport mode trunk
 ```
+![](img/trunk_s2.png)
+
 6. Настройка сабинтерфейсов на маршрутизаторе R1
 ```
 !
@@ -164,3 +168,15 @@ interface Ethernet0/0.8
  description NATIVE
  encapsulation dot1Q 8 native
 ```
+---
+### Поверка работы 
+1. пинг с PC-A на шлюз по умолчанию
+![](img/ping_pc-a-1.png)
+2. пинг с PC-A на PC-B
+![](img/ping_pc-a_2.png)
+3. пинг с PC-A на S2
+![](img/ping_pc-a_3.png)
+4. пинг с PC-B на PC-A
+![](img/ping_pc-b_1.png)
+
+Все файлы конфигураций [здесь](config/).
