@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 11:42:45 UTC Sun Mar 9 2025
+! Last configuration change at 08:22:17 UTC Tue Mar 11 2025
 !
 version 15.4
 service timestamps debug datetime msec
@@ -64,6 +64,7 @@ redundancy
 !
 interface Ethernet0/0
  no shutdown
+ description to_S1
  no ip address
 !
 interface Ethernet0/0.3
