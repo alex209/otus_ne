@@ -107,14 +107,22 @@ interface Ethernet1/3
  switchport access vlan 4
  switchport mode access
 ```
-5. Настроим транковое соединение между коммутаторами S1 и S2
+5. Настройка транкового соединения между коммутаторами S1 и S2 и маршрутизатором R1
 
 S1
 ```
 !
+interface Ethernet0/0
+ no shutdown
+ description to_R1
+ switchport trunk allowed vlan 3,4,8
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 8
+ switchport mode trunk
+!
 interface Ethernet0/1
  no shutdown
- description to _S2
+ description to_S2
  switchport trunk allowed vlan 3,4,7,8
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 8
@@ -130,4 +138,29 @@ interface Ethernet0/1
  switchport trunk encapsulation dot1q
  switchport trunk native vlan 8
  switchport mode trunk
+```
+6. Настройка сабинтерфейсов на маршрутизаторе R1
+```
+!
+interface Ethernet0/0
+ no shutdown
+ description to_S1
+ no ip address
+!
+interface Ethernet0/0.3
+ no shutdown
+ description MANAGEMENT
+ encapsulation dot1Q 3
+ ip address 192.168.3.1 255.255.255.0
+!
+interface Ethernet0/0.4
+ no shutdown
+ description OPERATIONS
+ encapsulation dot1Q 4
+ ip address 192.168.4.1 255.255.255.0
+!
+interface Ethernet0/0.8
+ no shutdown
+ description NATIVE
+ encapsulation dot1Q 8 native
 ```
