@@ -71,7 +71,7 @@ interface Vlan3
 !
 ip default-gateway 192.168.3.1
 ```
-3. Неиспользуемые интрфейсый коммутаторов S1 и S2 назаначаем во VALN 7 (ParkingLot) 
+3. Неиспользуемые интрфейсый коммутаторов S1 и S2 назначаем во VALN 7 (ParkingLot) 
 
 S1
 ```
@@ -87,4 +87,47 @@ interface range e0/0, e0/2-3, e1/0-2
  switchport mode access
  switchport access vlan 7
 ```
-4. 
+4. Назначим VLAN на пользовательские итерфейсы на коммутаторах S1 и S2 
+
+S1
+```
+!
+interface Ethernet1/3
+ no shutdown
+ description to_PC-A
+ switchport access vlan 3
+ switchport mode access
+```
+S2
+```
+!
+interface Ethernet1/3
+ no shutdown
+ description to_PC-B
+ switchport access vlan 4
+ switchport mode access
+```
+5. Настроим транковое соединение между коммутаторами S1 и S2
+
+S1
+```
+!
+interface Ethernet0/1
+ no shutdown
+ description to _S2
+ switchport trunk allowed vlan 3,4,7,8
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 8
+ switchport mode trunk
+```
+S2
+```
+!
+interface Ethernet0/1
+ no shutdown
+ description to_S1
+ switchport trunk allowed vlan 3,4,7,8
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 8
+ switchport mode trunk
+```
