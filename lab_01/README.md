@@ -6,11 +6,11 @@
 ### Исходные данные
 Залание выполняется в среде EVE-NG Pro Version 6.2.0-20
 
-Маршрутизатор R1 - образ *L3-ADVENTERPRISEK9-M-15.4-2T* 8 ethenet поротов e0/0-3, e1/0-3
+Маршрутизатор R1 - образ **L3-ADVENTERPRISEK9-M-15.4-2T** </br>8 ethenet поротов e0/0-3, e1/0-3
 
-Коммутаторы S1 и S2 - образ *L2-ADVENTERPRISEK9-M-15.2-20150703* 8 ethenet поротов e0/0-3, e1/0-3
+Коммутаторы S1 и S2 - образ **L2-ADVENTERPRISEK9-M-15.2-20150703** </br>8 ethenet поротов e0/0-3, e1/0-3
 ### Топология сети
-![](img/lab_01.png)
+![Топология сети](img/lab_01.png)
 
 ### Таблица адресов
 |Device|Interface|IP Address  |Subnet Mask  |Default Gateway|
@@ -36,4 +36,55 @@
 |8   |Native    |n/a                     |
 
 ### Этапы выполнения
-1. 
+1. Создем необходимые VLAN на коммутаторах S1 и S2.
+
+```
+!
+valn 3
+name MANAGEMENT
+vlan 4 
+name OPERATON
+vlan 7
+name PARKING_LOT
+vlan 8 
+name NATIVE
+```
+2. Создаем L3 интерфейсы управления на коммутаторах S1 и S2 и маршрут по умолчанию.
+
+S1
+```
+!
+interface Vlan3
+ no shutdown
+ description MANAGEMENT
+ ip address 192.168.3.11 255.255.255.0
+!
+ip default-gateway 192.168.3.1
+```
+S2
+```
+!
+interface Vlan3
+ no shutdown
+ description MANAGEMENT
+ ip address 192.168.3.12 255.255.255.0
+!
+ip default-gateway 192.168.3.1
+```
+3. Неиспользуемые интрфейсый коммутаторов S1 и S2 назаначаем во VALN 7 (ParkingLot) 
+
+S1
+```
+!
+interface range e0/2-3, e1/0-2
+ switchport mode access
+ switchport access vlan 7
+```
+S2
+```
+!
+interface range e0/0, e0/2-3, e1/0-2
+ switchport mode access
+ switchport access vlan 7
+```
+4. 
