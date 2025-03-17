@@ -85,3 +85,21 @@
         ![](img/ping_S2toS3.png)
 
 #### Определение корневого моста
+
+```
+S1#show spanning-tree
+```
+![](img/stp_S1.png)
+
+
+```
+S2#show spanning-tree
+```
+![](img/stp_S2.png)
+
+```
+S3#show spanning-tree
+```
+![](img/stp_S3.png)
+
+
