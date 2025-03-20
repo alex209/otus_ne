@@ -86,20 +86,47 @@
 
 #### Определение корневого моста
 
-```
-S1#show spanning-tree
-```
-![](img/stp_S1.png)
+1. Отключить все порты на коммутаторах  
+    ```
+    (config)#interface range e0/0-3,e1/0-3
+    (config-if-range)#shutdown
+    ```
+2. Настроить все подключенные порты в качестве транковых
+    ```
+    (config)#interface range e0/0-3
+    (config-if-range)#switchport trunk encapsulation dot1q
+    (config-if-range)#switchport mode trunk
+    (config-if-range)#switchport trunk allowed vlan all  
+    ```
+3. Включить порты e0/1 и e0/3 на всех коммутаторах
+    ```
+    (config)#interface range e0/1,e0/3
+    (config-if-range)#no shutdown
+    ```
+4. Отобразить данные протокола spanning-tree
+
+    + **S1**
+    ```
+    S1#show spanning-tree
+    ```
+    ![](img/stp_s1.png)
+    + **S2**
+    ```
+    S2#show spanning-tree
+    ```
+    ![](img/stp_s2.png)
+    + **S3**
+    ```
+    S3#show spanning-tree
+    ```
+    ![](img/stp_s3.png)
+
+    ![](img/lab_02_sts.png)
+
+    Согласно выводу команды **show spanning-tree** Root Bridge стал  коммутатор **S1** с наименьшим значением mac адреса aabb.cc80.0100, т.к. Priority на всех коммутаторах установлен в дефолтное значение 32768.
 
 
-```
-S2#show spanning-tree
-```
-![](img/stp_S2.png)
 
-```
-S3#show spanning-tree
-```
-![](img/stp_S3.png)
+
 
 
