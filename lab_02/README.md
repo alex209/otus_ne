@@ -153,7 +153,7 @@
     (config-if)#spanning-tree cost 99
     ```
 
-3. Просмотр изменения протокола spanning-tree.
+3. Просмотр изменения протокола spanning-tree на некорневых коммутаторах.
     
     ```
     S2#show spanning-tree
@@ -164,12 +164,30 @@
     S3#show spanning-tree
     ```
     ![](img/stp_s3_ch_cost.png)
-    
 
+4. Удаление изменения стоимости порта на коммутаторе **S3**.
+    ```
+    (config)#interface e0/3
+    (config-if)#no spanning-tree cost 
+    ```
+Протокол spanning-tree меняет заблокированный порт и назначенный порт т.к. меняется стоимость пути до корневого коммутатора. Порт с более низкой стоимостью является приоритетным. 
 
- 
+#### Наблюдение за процессом выбора протоколом STP порта, исходя из приоритета портов
 
+1. Включим порты *e0/0* и *e0/2* на всех коммутаторах
+    ```
+    (config)#interface range e0/0,e0/2
+    (config-if-range)#no shutdown
+    ```
 
+2. Просмотр изменения протокола spanning-tree на некорневых коммутаторах.
+    ```
+    S2#show spanning-tree
+    ```
+    ![](img/stp_s2_all_ports.png)
 
-
+    ```
+    S3#show spanning-tree
+    ```
+    ![](img/stp_s3_all_ports.png)
 
