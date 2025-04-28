@@ -230,7 +230,7 @@
 
 # Настройка DHCPv6
 
-## 1. Включение IPv6 маршрутизации и настройка IPv6 адресов на маршрутизаторах R1 и R2
+## 1. Настройка Stateless IPv6 адресов на PC-A и PC-B
    + R1
    ```
    R1(config)#ipv6 unicast-routing
@@ -257,5 +257,14 @@
    R2(config-if)#exit
    R2(config)#ipv6 route ::/0 2001:db8:acad:2::1
    ```
-## 2. Проверка получения адреса IPv6 от маршрутизаторов
+## 2. Проверка получения адреса IPv6 от маршрутизаторов и IPv6 связи между PC-A и PC-B
+
    + R1
+   ![](./img/r1_ipv6_addr.png)
+   + PC-A
+   ![](./img/pc-a_ipv6_addr.png)
+   + R2
+   ![](./img/r2_ipv6_addr.png)
+   + PC-B
+   ![](./img/pc-b_ipv6_addr.png)
+
