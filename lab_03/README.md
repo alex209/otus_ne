@@ -211,4 +211,51 @@
    PC-B получен адрес 192.168.1.102 из подсети C
    ![](./img/pc-b_address.png)
 
-   + Проверка 
+   + Проверка конфигурации сервера DHCP на R1
+
+   ```
+   show ip dhcp pool
+   ```
+   ![](./img/r1_ip_dhcp_pool.png)
+
+   ```
+   show ip dhcp bindings
+   ```
+   ![](./img/r1_ip_dhcp_binding.png)
+
+   ```
+   show ip dhcp server statistics
+   ```
+   ![](./img/r1_ip_dhcp_server_statistic.png)
+
+# Настройка DHCPv6
+
+## 1. Включение IPv6 маршрутизации и настройка IPv6 адресов на маршрутизаторах R1 и R2
+   + R1
+   ```
+   R1(config)#ipv6 unicast-routing
+   R1(config)#interface g0/0
+   R1(config-if)# ipv6 address fe80::1 link-local
+   R1(config-if)# ipv6 address 2001:db8:acad:2::1/64
+   R1(config-if)#exit
+   R1(config)#interface GigabitEthernet0/1.100
+   R1(config-subif)# ipv6 address fe80::1 link-local
+   R1(config-subif)# ipv6 address 2001:db8:acad:1::1/64
+   R1(config-if)#exit
+   R2(config)#ipv6 route ::/0 2001:db8:acad:2::2
+   ```
+   + R2
+   ```
+   R2(config)#ipv6 unicast-routing
+   R2(config)#interface g0/0
+   R2(config-if)# ipv6 address fe80::2 link-local
+   R2(config-if)# ipv6 address 2001:db8:acad:2::2/64
+   R2(config-if)#exit
+   R2(config)#interface g0/1
+   R2(config-if)# ipv6 address fe80::1 link-local
+   R2(config-if)# ipv6 address 2001:db8:acad:3::1/64
+   R2(config-if)#exit
+   R2(config)#ipv6 route ::/0 2001:db8:acad:2::1
+   ```
+## 2. Проверка получения адреса IPv6 от маршрутизаторов
+   + R1
