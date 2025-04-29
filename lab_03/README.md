@@ -294,21 +294,27 @@
 ## 2. Проверка получения адреса IPv6 от маршрутизаторов и IPv6 связи между PC-A и PC-B
 
    + R1
+  
    ![](./img/r1_ipv6_addr.png)
    
    + PC-A
+  
    ![](./img/pc-a_ipv6_addr.png)
    
    + R2
+  
    ![](./img/r2_ipv6_addr.png)
    
    + PC-B
+  
    ![](./img/pc-b_ipv6_addr.png)
    
    + пинги от PC-A к PC-B
+  
    ![](./img/pc-a_ping_pc-b_ipv6.png)
    
    + пингт от PC-B к PC-A
+
    ![](./img/pc-b_ping_pc-a_ipv6.png)
 
 ## 3. Настройка Stateless IPv6 адресов с получением дополнительных параметров от DHCPv6
@@ -324,9 +330,11 @@
 
    ```
    + Проверка правильности настройки R1
+  
    ![](./img/r1_dhcpv6_option.png)
    
    + Проверка получения IPv6 адреса DNS сервера на PC-A
+  
    ![](./img/pc-a_dhcpv6_stateless.png)
    
 ## 4. Настройка Stateful DHCPv6 сервера на R1
@@ -348,4 +356,5 @@
    R2(config)#ipv6 dhcp relay destination 2001:db8:acad:2::1 g0/0
    ```
    + Проверка получения IPv6 адреса и DNS сервера на PC-B
+  
    ![](./img/pc-b_dhcpv6_stateful.png)
