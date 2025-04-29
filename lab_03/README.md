@@ -267,4 +267,45 @@
    ![](./img/r2_ipv6_addr.png)
    + PC-B
    ![](./img/pc-b_ipv6_addr.png)
+   + пинги от PC-A к PC-B
+   ![](./img/pc-a_ping_pc-b_ipv6.png)
+   + пингт от PC-B к PC-A
+   ![](./img/pc-b_ping_pc-a_ipv6.png)
 
+## 3. Настройка Stateless IPv6 адресов с получением дополнительных параметров от DHCPv6
+   + R1
+   ```
+   R1(config)#ipv6 dhcp pool R1-STATELESS
+   R1(config-dhcpv6)#dns-server 2001:db8:acad::254
+   R1(config-dhcpv6)#domain-name SATTELESS.com
+   R1(config-dhcpv6)#exit
+   R1(config)#interface g0/1.100
+   R1(config-subif)#ipv6 nd other-config-flag
+   R1(config-subif)#ipv6 dhcp server R1-STATELESS
+
+   ```
+   + Проверка правильности настройки R1
+   ![](./img/r1_dhcpv6_option.png)
+   
+   + Проверка получения IPv6 адреса DNS сервера на PC-A
+   ![](./img/pc-a_dhcpv6_stateless.png)
+   
+## 4. Настройка Stateful DHCPv6 сервера на R1
+   + R1
+   ```
+   R1(config)#ipv6 dhcp pool R2-STATEFUL
+   R1(config-dhcpv6)#address prefix 2001:db8:acad:3:aaa::/80
+   R1(config-dhcpv6)#dns-server 2001:db8:acad::254
+   R1(config-dhcpv6)#domain-name SATTEFUL.com
+   R1(config-dhcpv6)#exit
+   R1(config)#interface g0/0
+   R1(config-if)#ipv6 dhcp server R2-STATEFUL
+
+   ```
+   + Настройка DHCPv6 relay на R2
+   ```
+   R2(config)#interface g0/1
+   R2(config)#ipv6 nd managed-config-flag
+   R2(config)#ipv6 dhcp relay destination 2001:db8:acad:2::1 g0/0
+   ```
+   + 
