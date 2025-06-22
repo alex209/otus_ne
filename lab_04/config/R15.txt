@@ -1,0 +1,122 @@
+
+!
+! Last configuration change at 11:07:50 UTC Sun Jun 22 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R15
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Q5iJ$urHN0vkghBI81.8bEyroG.
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ description Loopback_R15
+ ip address 10.100.100.15 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R13
+ ip address 10.10.90.6 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R12
+ ip address 10.10.90.14 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_R21_AS301
+ ip address 128.249.190.2 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R20
+ ip address 10.10.90.38 255.255.255.252
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Unauthorized access denied
+!
+line con 0
+ password 7 104D000A0618
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 121A0C041104
+ login
+ transport input none
+!
+!
+end

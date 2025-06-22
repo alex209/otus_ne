@@ -1,0 +1,142 @@
+
+!
+! Last configuration change at 11:12:48 UTC Sun Jun 22 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R25
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Lypp$Vb2RUsV5w/0E1TcFysIl1/
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ description Loopback_R25
+ ip address 10.52.0.25 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R23
+ ip address 10.30.90.2 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R27_ext
+ ip address 67.73.196.5 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_R26 
+ ip address 10.30.90.9 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R28_ext
+ ip address 67.73.196.1 255.255.255.252
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Unauthorized access denied
+!
+line con 0
+ password 7 14141B180F0B
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 01100F175804
+ login
+ transport input none
+!
+!
+end
