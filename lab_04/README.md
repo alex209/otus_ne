@@ -165,3 +165,403 @@
 | SW29   | vlan102   | 10.200.200.229 | 255.255.255.192 | 10.200.200.193  | MGMT         |
 | VPC30  | eth0      | 192.168.12.10  | 255.255.255.0   | 192.168.12.1    |              |
 | VPC31  | eht0      | 192.168.22.10  | 255.255.255.0   | 192.168.22.1    |              |
+
+## Таблица VLAN для Чокурдан
+
+| VLAN | Name      | Назначенный интерфейс |
+| ---- | --------- | --------------------- |
+| 12   | Client 12 | SW29: e0/0            |
+| 22   | Client 22 | SW29: e0/1            |
+| 102  | MGMT      | SW29: VLAN 102        |
+
+# Настройка оборудования
+
+<details>
+<summary> Настройка базовых параметров </summary>
+
+- Присвойте имена устройствам в соответствии с топологией.
+
+```
+ (config)# hostname <X><n>
+```
+
+    где \<X> R - маршрутизатор S - коммутатор </br>
+        \<n> номер устройства
+
+- Отключение поиска DNS
+
+```
+ (config)# no ip domain-lookup
+```
+
+- Назначьте **class** в качестве зашифрованного пароля доступа к привилегированному режиму.
+
+```
+ (config)# enable secret class
+```
+
+- Назначьте **cisco** в качестве паролей консоли и VTY
+
+```
+ (config)# line console 0
+ (config-line)# password cisco
+ (config-line)# login
+```
+
+```
+ (config)# line vty 0 4
+ (config-line)# password cisco
+ (config-line)# login
+```
+
+- Включить шифрование паролей
+
+```
+ (config)# service password-encryption
+```
+
+- Настройка баннерного сообщения дня (MOTD) для предупреждения пользователей о запрете несанкционированного доступа.
+
+```
+ (config)# banner motd "Unauthorized access denied"
+```
+
+- Сохранение конфигурации
+
+```
+ #copy running-config startup-config
+```
+
+</details>
+
+# Настраиваем интерфейсы и ip адреса
+
+## AS 101 (Киторн)
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R22: </summary>
+
+```
+interface Loopback0
+ description Loopback_R22
+ ip address 10.10.1.22 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R14_AS100
+ ip address 207.231.240.1 255.255.255.252
+!
+interface Ethernet0/1
+ description to_R21_AS301
+ ip address 209.124.176.1 255.255.255.252
+!
+interface Ethernet0/2
+ description to_R23_AS520
+ ip address 207.231.242.5 255.255.255.252
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+
+```
+
+</details>
+
+## AS 301 (Ламас)
+
+<details>
+<summary> Настраиваем интерфейсы для маршрутизатора R21: </summary>
+
+```
+interface Loopback0
+ description Loopback_R21
+ ip address 10.30.1.21 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R15_AS1001
+ ip address 128.249.190.1 255.255.255.252
+!
+interface Ethernet0/1
+ description to_R22_AS101
+ ip address 209.124.176.2 255.255.255.252
+!
+interface Ethernet0/2
+ description to_R24_AS520
+ ip address 128.249.165.1 255.255.255.252
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+
+```
+
+</details>
+
+## AS 520 (Триада)
+
+<details>
+<summary> Настраиваем интерфейсы для маршрутизатора R23: </summary>
+
+```
+interface Loopback0
+ description Loopback_R23
+ ip address 10.52.0.23 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R22_AS101
+ ip address 207.231.242.6 255.255.255.252
+!
+interface Ethernet0/1
+ description to_R25
+ ip address 10.30.90.1 255.255.255.252
+!
+interface Ethernet0/2
+ description to_R24
+ ip address 10.30.90.5 255.255.255.252
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+
+```
+
+</details>
+
+<details>
+<summary> Настраиваем интерфейсы для маршрутизатора R24: </summary>
+
+```
+interface Loopback0
+ description Loopback_R24
+ ip address 10.52.0.24 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R21_AS301
+ ip address 128.249.165.2 255.255.255.252
+!
+interface Ethernet0/1
+ description to_R26
+ ip address 10.30.90.13 255.255.255.252
+!
+interface Ethernet0/2
+ description to_R23
+ ip address 10.30.90.6 255.255.255.252
+!
+interface Ethernet0/3
+ description to_R18_AS2
+ ip address 67.73.193.1 255.255.255.252
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+
+```
+
+</details>
+
+<details>
+<summary> Настраиваем интерфейсы для маршрутизатора R25: </summary>
+
+```
+interface Loopback0
+ description Loopback_R25
+ ip address 10.52.0.25 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R23
+ ip address 10.30.90.2 255.255.255.252
+!
+interface Ethernet0/1
+ description to_R27_ext
+ ip address 67.73.196.5 255.255.255.252
+!
+interface Ethernet0/2
+ description to_R26
+ ip address 10.30.90.9 255.255.255.252
+!
+interface Ethernet0/3
+ description to_R28_ext
+ ip address 67.73.196.1 255.255.255.252
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+
+```
+
+</details>
+
+<details>
+<summary> Настраиваем интерфейсы для маршрутизатора R26: </summary>
+
+```
+interface Loopback0
+ description Loopback_R26
+ ip address 10.52.0.26 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R24
+ ip address 10.30.90.14 255.255.255.252
+!
+interface Ethernet0/1
+ description to_R28_ext
+ ip address 8.242.244.1 255.255.255.252
+!
+interface Ethernet0/2
+ description to_R25
+ ip address 10.30.90.10 255.255.255.252
+!
+interface Ethernet0/3
+ description to_R18_AS2042
+ ip address 64.210.65.1 255.255.255.252
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+
+```
+
+</details>
+
+## Лабытнанги
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R27: </summary>
+
+```
+interface Loopback0
+ description Loopback_R27
+ ip address 10.200.200.27 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R25_ext
+ ip address 67.73.196.6 255.255.255.252
+!
+interface Ethernet0/1
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+
+```
+
+</details>
+
+## AS 1001 (Москва)
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R12: </summary>
+
+```
+
+```
+
+</details>
