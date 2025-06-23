@@ -1,6 +1,6 @@
 # Лабораторная №4
 
-## DHCPv4/v6 и SLAAC
+##
 
 ### Цели задания
 
@@ -561,7 +561,448 @@ interface Ethernet1/3
 <summary> Настраиваем интерфейсы для маршрутизатора R12: </summary>
 
 ```
+interface Loopback0
+ no shutdown
+ description Loopback_R12
+ ip address 10.100.100.12 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_SW4
+ ip address 10.10.90.18 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_SW5
+ ip address 10.10.90.29 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_R14
+ ip address 10.10.90.1 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R15
+ ip address 10.10.90.13 255.255.255.252
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
 
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R13: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R13
+ ip address 10.100.100.13 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_SW5
+ ip address 10.10.90.22 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_SW4
+ ip address 10.10.90.26 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_R15
+ ip address 10.10.90.5 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R14
+ ip address 10.10.90.10 255.255.255.252
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R14: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R14
+ ip address 10.100.100.14 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R12
+ ip address 10.10.90.2 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R13
+ ip address 10.10.90.9 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_R22_AS101
+ ip address 207.231.240.2 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R19
+ ip address 10.10.90.34 255.255.255.252
+!
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R15: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R15
+ ip address 10.100.100.15 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R13
+ ip address 10.10.90.6 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R12
+ ip address 10.10.90.14 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_R21_AS301
+ ip address 128.249.190.2 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R20
+ ip address 10.10.90.38 255.255.255.252
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R19: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R19
+ ip address 10.100.100.19 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R14
+ ip address 10.10.90.33 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R20: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R20
+ ip address 10.100.100.20 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R15
+ ip address 10.10.90.37 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора SW2: </summary>
+
+```
+interface Ethernet0/0
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ no shutdown
+ switchport access vlan 20
+ switchport mode access
+!
+interface Ethernet0/3
+ no shutdown
+!
+interface Ethernet1/0
+ no shutdown
+!
+interface Ethernet1/1
+ no shutdown
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+interface Vlan100
+ no shutdown
+ description MGMT
+ ip address 10.100.100.202 255.255.255.192
+!
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора SW3: </summary>
+
+```
+interface Ethernet0/0
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ no shutdown
+ switchport access vlan 10
+ switchport mode access
+!
+interface Ethernet0/3
+ no shutdown
+!
+interface Ethernet1/0
+ no shutdown
+!
+interface Ethernet1/1
+ no shutdown
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+interface Vlan100
+ no shutdown
+ description MGMT
+ ip address 10.200.100.203 255.255.255.192
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора SW4: </summary>
+
+```
+interface Port-channel1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface Ethernet0/3
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface Ethernet1/0
+ no shutdown
+ description to_R12
+ no switchport
+ ip address 10.10.90.17 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/1
+ no shutdown
+ description to_R13
+ no switchport
+ ip address 10.10.90.25 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+interface Vlan100
+ no shutdown
+ description MGMT
+ ip address 10.100.100.204 255.255.255.192
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора SW5: </summary>
+
+```
+interface Port-channel1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet0/3
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet1/0
+ no shutdown
+ description to_R13
+ no switchport
+ ip address 10.10.90.21 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/1
+ no shutdown
+ description to_R12
+ no switchport
+ ip address 10.10.90.30 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+interface Vlan100
+ no shutdown
+ description MGMT
+ ip address 10.100.100.205 255.255.255.192
 ```
 
 </details>
