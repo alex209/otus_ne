@@ -1006,3 +1006,426 @@ interface Vlan100
 ```
 
 </details>
+
+<details>
+
+<summary> Настраиваем VPC1: </summary>
+
+```
+set pcname VPCS
+ip 192.168.10.10 192.168.10.1 24
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем VPC7: </summary>
+
+```
+set pcname VPCS
+ip 192.168.20.10 192.168.20.1 24
+```
+
+</details>
+
+## AS 2042 (С.-Петербург)
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R16: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R16
+ ip address 10.200.100.16 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_SW10
+ ip address 10.20.90.5 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R18
+ ip address 10.20.90.22 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_SW9
+ ip address 10.20.90.9 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R32
+ ip address 10.20.90.25 255.255.255.252
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R17: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R17
+ ip address 10.200.100.17 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_SW9
+ ip address 10.20.90.1 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R18
+ ip address 10.20.90.17 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_SW10
+ ip address 10.20.90.13 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R18: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R18
+ ip address 10.200.100.18 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R16
+ ip address 10.20.90.21 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R17
+ ip address 10.20.90.18 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ description to_R24_AS520
+ ip address 67.73.193.2 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R26_AS520
+ ip address 64.210.65.2 255.255.255.252
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R32: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R32
+ ip address 10.200.100.32 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R16
+ ip address 10.20.90.26 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора SW9: </summary>
+
+```
+interface Port-channel1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface Ethernet0/1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface Ethernet0/2
+ no shutdown
+ switchport access vlan 11
+ switchport mode access
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R17
+ no switchport
+ ip address 10.20.90.2 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/0
+ no shutdown
+ description to_R16
+ no switchport
+ ip address 10.20.90.10 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/1
+ no shutdown
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+interface Vlan101
+ no shutdown
+ description MGMT
+ ip address 10.200.100.209 255.255.255.192
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора SW10: </summary>
+
+```
+interface Port-channel1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet0/1
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet0/2
+ no shutdown
+ switchport access vlan 21
+ switchport mode access
+!
+interface Ethernet0/3
+ no shutdown
+ description to_R16
+ no switchport
+ ip address 10.20.90.6 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/0
+ no shutdown
+ description to_R17
+ no switchport
+ ip address 10.20.90.14 255.255.255.252
+ duplex auto
+!
+interface Ethernet1/1
+ no shutdown
+!
+interface Ethernet1/2
+ no shutdown
+!
+interface Ethernet1/3
+ no shutdown
+!
+interface Vlan101
+ no shutdown
+ description MGMT
+ ip address 10.200.100.210 255.255.255.192
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем VPC8: </summary>
+
+```
+set pcname VPCS
+ip 192.168.11.10 192.168.11.1 24
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем VPC: </summary>
+
+```
+set pcname VPCS
+ip 192.168.21.10 192.168.21.1 24
+```
+
+</details>
+
+## Чокурдах
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора R28: </summary>
+
+```
+interface Loopback0
+ no shutdown
+ description Loopback_R28
+ ip address 10.200.200.28 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ description to_R26_AS520
+ ip address 8.242.244.2 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ description to_R25_AS520
+ ip address 67.73.196.2 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+!
+interface Ethernet0/2.12
+ no shutdown
+ description Client VLAN 12
+ encapsulation dot1Q 12
+ ip address 192.168.12.1 255.255.255.0
+!
+interface Ethernet0/2.22
+ no shutdown
+ description Client VLAN 22
+ encapsulation dot1Q 22
+ ip address 192.168.22.1 255.255.255.0
+!
+interface Ethernet0/2.102
+ no shutdown
+ description MGMT
+ encapsulation dot1Q 102
+ ip address 10.200.200.193 255.255.255.192
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем интерфейсы для маршрутизатора SW29: </summary>
+
+```
+interface Ethernet0/0
+ no shutdown
+ switchport access vlan 12
+ switchport mode access
+!
+interface Ethernet0/1
+ no shutdown
+ switchport access vlan 22
+ switchport mode access
+!
+interface Ethernet0/2
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/3
+ no shutdown
+!
+interface Vlan102
+ no shutdown
+ description MGMT
+ ip address 10.200.200.229 255.255.255.192
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем VPC30: </summary>
+
+```
+set pcname VPCS
+ip 192.168.10.10 192.168.10.1 24
+```
+
+</details>
+
+<details>
+
+<summary> Настраиваем VPC31: </summary>
+
+```
+set pcname VPCS
+ip 192.168.20.10 192.168.20.1 24
+```
+
+</details>
