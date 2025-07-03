@@ -1,0 +1,99 @@
+
+!
+! Last configuration change at 07:31:34 UTC Sun Jun 29 2025
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname SW29
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$.JrP$Dwzah3Smaz2GmdJNRHaK..
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ switchport access vlan 12
+ switchport mode access
+!
+interface Ethernet0/1
+ no shutdown
+ switchport access vlan 22
+ switchport mode access
+!
+interface Ethernet0/2
+ no shutdown
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/3
+ no shutdown
+!
+interface Vlan102
+ no shutdown
+ description MGMT
+ ip address 10.200.200.229 255.255.255.192
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner motd Unauthorized access denied
+!
+line con 0
+ password 7 070C285F4D06
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 01100F175804
+ login
+!
+!
+end
