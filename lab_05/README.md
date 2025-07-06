@@ -374,7 +374,7 @@ ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
 
 ```
 
-- настроим event manager для очищения таблицы NAT при срабатывания
+- настроим event manager для очищения таблицы NAT при срабатывания TRACKING
 
 ```
 !
@@ -402,3 +402,36 @@ event manager applet TR2_Up
 ```
 
 </details>
+
+# Проверка работоспособности
+
+<details>
+<summary> ping и trace от VPC30 до R25 </summary>
+
+![](./img/ping_vpc30.png)
+
+![](./img/trace_vpc30.png)
+
+</details>
+
+<details>
+<summary> ping и trace от VPC31 до R26 </summary>
+
+![](./img/ping_vpc31.png)
+
+![](./img/trace_vpc31.png)
+
+</details>
+
+<details>
+<summary> проверка TRACKING </summary>
+
+отключим линию от R28 к R25
+![](./img/track_1.png)
+
+ping от VPC30 до R 26
+![](./img/ping_vpc30_r26.png)
+
+</details>
+
+### [Файлы конфигураций устройств ](./config/)
