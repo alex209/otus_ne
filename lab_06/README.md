@@ -535,6 +535,30 @@ router ospfv3 1
 # Проверка работоспособности
 
 <details>
-<summary>  </summary>
+<summary>Таблицы маршрутизации</summary>
+
+!["Таблица маршрутизации R14"](./img/route_R14.png)
+
+!["Таблица маршрутизации IPV6 R14"](./img/route_R14_ipv6.png)
+
+!["Таблица маршрутизации R15"](./img/route_R15.png)
+
+!["Таблица маршрутизации IPV6 R15"](./img/route_R15_ipv6.png)
+
+!["Таблица маршрутизации R12"](./img/route_R12.png)
+
+!["Таблица маршрутизации IPV6 R12"](./img/route_R12_ipv6.png)
+
+!["Таблица маршрутизации R13"](./img/route_R13.png)
+
+!["Таблица маршрутизации IPV6 R13"](./img/route_R13_ipv6.png)
+
+!["Таблица маршрутизации R19"](./img/route_R19.png)
+
+!["Таблица маршрутизации IPV6 R19"](./img/route_R19_ipv6.png)
+
+!["Таблица маршрутизации R20"](./img/route_R20.png)
+
+!["Таблица маршрутизации IPV6 R20"](./img/route_R20_ipv6.png)
 
 </details>
