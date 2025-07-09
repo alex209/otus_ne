@@ -562,3 +562,21 @@ router ospfv3 1
 !["Таблица маршрутизации IPV6 R20"](./img/route_R20_ipv6.png)
 
 </details>
+
+<details>
+<summary>Проверка IP связности</summary>
+
+!["Пинги IPv4 на loopback маршрутизаторов R15, R12, R13, R19, R20"](./img/ping_from_r14.png)
+
+!["Пинги IPv6 на loopback маршрутизаторов R15, R12, R13, R19, R20"](./img/ping_from_r14_ipv6.png)
+
+</details>
+
+<details>
+<summary>Соседство OSPF</summary>
+
+!["R14"](./img/neighbor_R14.png)
+
+!["R15"](./img/neighbor_R15.png)
+
+</details>
