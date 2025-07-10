@@ -1,6 +1,5 @@
-
 !
-! Last configuration change at 18:40:30 UTC Wed Jul 9 2025
+! Last configuration change at 06:56:23 UTC Thu Jul 10 2025
 !
 version 15.4
 service timestamps debug datetime msec
@@ -27,13 +26,6 @@ mmi snmp-timeout 180
 !
 !
 !
-!
-
-
-!
-!
-!
-!
 no ip domain lookup
 ip cef
 no ipv6 cef
@@ -51,12 +43,6 @@ multilink bundle-name authenticated
 redundancy
 !
 !
-! 
-!
-!
-!
-!
-!
 !
 !
 !
@@ -65,62 +51,55 @@ redundancy
 !
 !
 interface Loopback0
- no shutdown
  description Loopback_R24
  ip address 10.52.0.24 255.255.255.255
+ ip router isis
  ipv6 address 2001:DB8::520:24/128
  ipv6 enable
+ ipv6 router isis
 !
 interface Ethernet0/0
- no shutdown
  description to_R21_AS301
  ip address 128.249.165.2 255.255.255.252
 !
 interface Ethernet0/1
- no shutdown
  description to_R26
  ip address 10.30.90.13 255.255.255.252
- ip router isis 
+ ip router isis
  ipv6 address FE80:520::24 link-local
  ipv6 address 2001:DB8:2426::24/64
  ipv6 enable
- ipv6 router isis 
+ ipv6 router isis
  isis circuit-type level-2-only
- isis metric 20
+ isis metric 21
 !
 interface Ethernet0/2
- no shutdown
  description to_R23
  ip address 10.30.90.6 255.255.255.252
- ip router isis 
+ ip router isis
  ipv6 address FE80:520::24 link-local
  ipv6 address 2001:DB8:2324::24/64
  ipv6 enable
- ipv6 router isis 
+ ipv6 router isis
  isis circuit-type level-2-only
 !
 interface Ethernet0/3
- no shutdown
  description to_R18_AS2
  ip address 67.73.193.1 255.255.255.252
 !
 interface Ethernet1/0
- no shutdown
  no ip address
  shutdown
 !
 interface Ethernet1/1
- no shutdown
  no ip address
  shutdown
 !
 interface Ethernet1/2
- no shutdown
  no ip address
  shutdown
 !
 interface Ethernet1/3
- no shutdown
  no ip address
  shutdown
 !
@@ -128,7 +107,6 @@ router isis
  net 49.0024.0100.5200.0024.00
  is-type level-2-only
  metric-style wide
- passive-interface Loopback0
 !
 ip forward-protocol nd
 !
@@ -147,7 +125,7 @@ control-plane
 !
 !
 !
-banner motd Unauthorized access denied
+banner motd ^CUnauthorized access denied^C
 !
 line con 0
  password 7 01100F175804
