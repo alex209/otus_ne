@@ -313,4 +313,37 @@ router isis
 
 </details>
 
+# Проверка работоспособности
+
+<details>
+<summary>Таблицы маршрутизации</summary>
+
+!["Таблица маршрутизации R23"](./img/route_R23.png)
+
+!["Таблица маршрутизации R23 IPv6"](./img/route_R23_ipv6.png)
+
+!["Таблица маршрутизации R24"](./img/route_R24.png)
+
+!["Таблица маршрутизации R24 IPv6"](./img/route_R24_ipv6.png)
+
+!["Таблица маршрутизации R25"](./img/route_R25.png)
+
+!["Таблица маршрутизации R25 IPv6"](./img/route_R25_ipv6.png)
+
+!["Таблица маршрутизации R26"](./img/route_R26.png)
+
+!["Таблица маршрутизации R26 IPv6"](./img/route_R26_ipv6.png)
+
+</details>
+
+<details>
+<summary>Проверка IP связности</summary>
+
+</details>
+
+<details>
+<summary>Соседство ISIS</summary>
+
+</details>
+
 ### [Файлы конфигураций устройств ](./config/)
