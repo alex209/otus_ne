@@ -339,10 +339,22 @@ router isis
 <details>
 <summary>Проверка IP связности</summary>
 
+!["Пинги IPv4 на loopback маршрутизаторов R24, R25, R26"](./img/ping.png)
+
+!["Пинги IPv6 на loopback маршрутизаторов R24, R25, R26"](./img/ping_ipv6.png)
+
 </details>
 
 <details>
 <summary>Соседство ISIS</summary>
+
+!["R23"](./img/neighbors_R23.png)
+
+!["R24"](./img/neighbors_R24.png)
+
+!["R25"](./img/neighbors_R25.png)
+
+!["R26"](./img/neighbors_R26.png)
 
 </details>
 
