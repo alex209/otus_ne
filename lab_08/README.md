@@ -531,3 +531,47 @@ router eigrp AS2042
 !["Таблица маршрутизации SW10 IPv6"](./img/route_SW10_ipv6.png)
 
 </details>
+
+<details>
+<summary>Проверка IP связности</summary>
+
+Пинги IPv4 на loopback маршрутизаторов R17, R16, SW9, SW10, R32
+
+!["Пинги IPv4 на loopback маршрутизаторов R24, R25, R26"](./img/ping.png)
+
+Пинги IPv6 на loopback маршрутизаторов R17, R16, SW9, SW10, R32
+
+!["Пинги IPv6 на loopback маршрутизаторов R24, R25, R26"](./img/ping_ipv6.png)
+
+</details>
+
+<details>
+<summary>Соседство EIGRP</summary>
+
+R18
+
+!["R18"](./img/neighbors_R18.png)
+
+R17
+
+!["R17"](./img/neighbors_R17.png)
+
+R16
+
+!["R16"](./img/neighbors_R16.png)
+
+R32
+
+!["R32"](./img/neighbors_R32.png)
+
+SW9
+
+!["R32"](./img/neighbors_SW9.png)
+
+SW10
+
+!["R32"](./img/neighbors_SW10.png)
+
+</details>
+
+### [Файлы конфигураций устройств ](./config/)
