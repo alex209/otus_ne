@@ -1,18 +1,18 @@
 !
-! Last configuration change at 13:03:37 UTC Sat Jul 12 2025
+! Last configuration change at 09:22:33 UTC Sat Jul 12 2025
 !
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
 service password-encryption
 !
-hostname R32
+hostname R17
 !
 boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$ILv2$aHEc3WI75Gi1zpcVY/oe10
+enable secret 5 $1$EV7y$Vc9wkCsW26ZxzK2llZ8h8/
 !
 no aaa new-model
 mmi polling-interval 60
@@ -65,25 +65,31 @@ redundancy
 !
 !
 interface Loopback0
- description Loopback_R32
- ip address 10.200.100.32 255.255.255.255
- ipv6 address 2001:DB8::2042:32/128
+ description Loopback_R17
+ ip address 10.200.100.17 255.255.255.255
+ ipv6 address 2001:DB8::2042:17/128
  ipv6 enable
 !
 interface Ethernet0/0
- description to_R16
- ip address 10.20.90.26 255.255.255.252
- ipv6 address FE80:2042::32 link-local
- ipv6 address 2001:DB8:1632::32/64
+ description to_SW9
+ ip address 10.20.90.1 255.255.255.252
+ ipv6 address FE80:2042::17 link-local
+ ipv6 address 2001:DB8:2042:917::1/64
  ipv6 enable
 !
 interface Ethernet0/1
- no ip address
- shutdown
+ description to_R18
+ ip address 10.20.90.17 255.255.255.252
+ ipv6 address FE80:2042::17 link-local
+ ipv6 address 2001:DB8:1718::17/64
+ ipv6 enable
 !
 interface Ethernet0/2
- no ip address
- shutdown
+ description to_SW10
+ ip address 10.20.90.13 255.255.255.252
+ ipv6 address FE80:2042::17 link-local
+ ipv6 address 2001:DB8:2042:1017::13/64
+ ipv6 enable
 !
 interface Ethernet0/3
  no ip address
@@ -94,18 +100,28 @@ router eigrp AS2042
  !
  address-family ipv4 unicast autonomous-system 2042
   !
+  af-interface Ethernet0/1
+   summary-address 10.20.90.0 255.255.255.240
+  exit-af-interface
+  !
   topology base
   exit-af-topology
-  network 10.20.90.24 0.0.0.3
-  network 10.200.100.32 0.0.0.0
-  eigrp router-id 10.200.100.32
+  network 10.20.90.0 0.0.0.3
+  network 10.20.90.12 0.0.0.3
+  network 10.20.90.16 0.0.0.3
+  network 10.200.100.17 0.0.0.0
+  eigrp router-id 10.200.100.17
  exit-address-family
  !
  address-family ipv6 unicast autonomous-system 2042
   !
+  af-interface Ethernet0/1
+   summary-address 2001:DB8:2042::/48
+  exit-af-interface
+  !
   topology base
   exit-af-topology
-  eigrp router-id 10.200.100.32
+  eigrp router-id 10.200.100.17
  exit-address-family
 !
 ip forward-protocol nd
@@ -128,12 +144,12 @@ control-plane
 banner motd ^CUnauthorized access denied^C
 !
 line con 0
- password 7 14141B180F0B
+ password 7 02050D480809
  logging synchronous
  login
 line aux 0
 line vty 0 4
- password 7 060506324F41
+ password 7 070C285F4D06
  login
  transport input none
 !
