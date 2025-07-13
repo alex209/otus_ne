@@ -339,7 +339,11 @@ router isis
 <details>
 <summary>Проверка IP связности</summary>
 
+Пинги IPv4 на loopback маршрутизаторов R24, R25, R26
+
 !["Пинги IPv4 на loopback маршрутизаторов R24, R25, R26"](./img/ping.png)
+
+Пинги IPv6 на loopback маршрутизаторов R24, R25, R26
 
 !["Пинги IPv6 на loopback маршрутизаторов R24, R25, R26"](./img/ping_ipv6.png)
 

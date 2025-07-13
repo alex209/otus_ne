@@ -109,14 +109,14 @@ router eigrp AS2042
   network 10.20.90.4 0.0.0.3
   network 10.20.90.12 0.0.0.3
   network 10.200.100.210 0.0.0.0
-  eigrp router-id 10.200.100.10
+  eigrp router-id 10.200.100.210
  exit-address-family
  !
  address-family ipv6 unicast autonomous-system 2042
   !
   topology base
   exit-af-topology
-  eigrp router-id 10.200.100.10
+  eigrp router-id 10.200.100.210
  exit-address-family
 !
 ip forward-protocol nd
