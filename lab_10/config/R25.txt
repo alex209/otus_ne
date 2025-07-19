@@ -1,0 +1,167 @@
+!
+! Last configuration change at 08:57:34 UTC Fri Jul 18 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R25
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Lypp$Vb2RUsV5w/0E1TcFysIl1/
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R25
+ ip address 10.52.0.25 255.255.255.255
+ ipv6 address 2001:DB8::520:25/128
+ ipv6 enable
+!
+interface Ethernet0/0
+ description to_R23
+ ip address 10.30.90.2 255.255.255.252
+ ipv6 address FE80:520::25 link-local
+ ipv6 address 2001:DB8:520:2325::25/64
+ ipv6 enable
+!
+interface Ethernet0/1
+ description to_R27_ext
+ ip address 67.73.196.5 255.255.255.252
+ ipv6 address 2001:678:5B0:2527::5/64
+ ipv6 enable
+!
+interface Ethernet0/2
+ description to_R26
+ ip address 10.30.90.9 255.255.255.252
+ ipv6 address FE80:520::25 link-local
+ ipv6 address 2001:DB8:520:2526::25/64
+ ipv6 enable
+!
+interface Ethernet0/3
+ description to_R28_ext
+ ip address 67.73.196.1 255.255.255.252
+ ipv6 address 2001:678:ADC:2528::1/64
+ ipv6 enable
+!
+interface Ethernet1/0
+ description to_R24
+ ip address 10.30.90.18 255.255.255.252
+ ipv6 address FE80:520::25 link-local
+ ipv6 address 2001:DB8:520:2425::25/64
+ ipv6 enable
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+router bgp 520
+ bgp router-id 10.52.0.25
+ bgp log-neighbor-changes
+ neighbor 10.30.90.17 remote-as 520
+ neighbor 2001:DB8:520:2425::24 remote-as 520
+ !
+ address-family ipv4
+  network 67.73.196.0 mask 255.255.255.252
+  network 67.73.196.4 mask 255.255.255.252
+  redistribute connected
+  neighbor 10.30.90.17 activate
+  no neighbor 2001:DB8:520:2425::24 activate
+ exit-address-family
+ !
+ address-family ipv6
+  redistribute connected
+  neighbor 2001:DB8:520:2425::24 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 14141B180F0B
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 01100F175804
+ login
+ transport input none
+!
+!
+end
