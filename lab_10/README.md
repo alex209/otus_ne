@@ -694,3 +694,9 @@ router bgp 1001
 ```
 
 </details>
+
+# Проверка работоспособности
+
+<details>
+
+<summary>Таблицы маршрутизации BGP</summary>
