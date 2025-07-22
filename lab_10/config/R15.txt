@@ -1,5 +1,5 @@
 !
-! Last configuration change at 09:12:41 UTC Fri Jul 18 2025
+! Last configuration change at 09:27:42 UTC Tue Jul 22 2025
 !
 version 15.4
 service timestamps debug datetime msec
@@ -146,23 +146,26 @@ router ospfv3 1
 router bgp 1001
  bgp router-id 10.100.100.15
  bgp log-neighbor-changes
- bgp default local-preference 200
  neighbor 10.10.90.41 remote-as 1001
  neighbor 2001:468:1A08:1001::1 remote-as 301
  neighbor 2001:DB8:1415::14 remote-as 1001
  neighbor 128.249.190.1 remote-as 301
  !
  address-family ipv4
+  network 10.10.90.40 mask 255.255.255.252
   network 128.249.190.0 mask 255.255.255.252
   neighbor 10.10.90.41 activate
   no neighbor 2001:468:1A08:1001::1 activate
   no neighbor 2001:DB8:1415::14 activate
   neighbor 128.249.190.1 activate
+  neighbor 128.249.190.1 route-map rm_ALL_OFFICE in
  exit-address-family
  !
  address-family ipv6
   network 2001:468:1A08:1001::/64
+  network 2001:DB8:1415::/64
   neighbor 2001:468:1A08:1001::1 activate
+  neighbor 2001:468:1A08:1001::1 route-map rm_ALL_OFFICE_v6 in
   neighbor 2001:DB8:1415::14 activate
  exit-address-family
 !
@@ -173,14 +176,38 @@ no ip http server
 no ip http secure-server
 !
 !
+ip prefix-list ALL_OFFICE seq 10 permit 67.73.193.0/30
+ip prefix-list ALL_OFFICE seq 20 permit 64.210.65.0/30
+ip prefix-list ALL_OFFICE seq 30 permit 67.73.196.0/30
+ip prefix-list ALL_OFFICE seq 40 permit 8.242.244.0/30
+ip prefix-list ALL_OFFICE seq 50 permit 67.73.196.4/30
+!
 ip prefix-list AREA_101 seq 10 deny 10.100.100.19/32
 ip prefix-list AREA_101 seq 20 deny 10.10.90.32/30
 ip prefix-list AREA_101 seq 30 permit 0.0.0.0/0 le 32
 !
 !
+ipv6 prefix-list ALL_OFFICE_v6 seq 10 permit 2C0F:F400:10FF:1::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 20 permit 2C0F:F400:10FF:2::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 30 permit 2001:678:ADC:2528::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 40 permit 2001:67C:94C:2628::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 50 permit 2001:678:5B0:2527::/64
+!
 ipv6 prefix-list AREA_101_v6 seq 10 deny 2001:DB8::1001:20/128
 ipv6 prefix-list AREA_101_v6 seq 20 deny 2001:DB8:1419::/64
 ipv6 prefix-list AREA_101_v6 seq 30 permit ::/0 le 128
+route-map rm_ALL_OFFICE_v6 permit 10
+ match ipv6 address prefix-list ALL_OFFICE_v6
+ set local-preference 300
+!
+route-map rm_ALL_OFFICE_v6 permit 20
+!
+route-map rm_ALL_OFFICE permit 10
+ match ip address prefix-list ALL_OFFICE
+ set local-preference 300
+!
+route-map rm_ALL_OFFICE permit 20
+!
 !
 !
 control-plane
@@ -205,5 +232,3 @@ line vty 0 4
 !
 !
 end
-
-R15#

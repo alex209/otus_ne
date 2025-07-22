@@ -1,5 +1,5 @@
 !
-! Last configuration change at 18:50:04 UTC Wed Jul 16 2025
+! Last configuration change at 09:27:09 UTC Tue Jul 22 2025
 !
 version 15.4
 service timestamps debug datetime msec
@@ -151,6 +151,7 @@ router bgp 1001
  neighbor 207.231.240.1 remote-as 101
  !
  address-family ipv4
+  network 10.10.90.40 mask 255.255.255.252
   network 207.231.240.0 mask 255.255.255.252
   neighbor 10.10.90.42 activate
   no neighbor 2001:DB8:1415::15 activate
@@ -159,6 +160,7 @@ router bgp 1001
  exit-address-family
  !
  address-family ipv6
+  network 2001:DB8:1415::/64
   network 2001:1860:4000:100::/64
   neighbor 2001:DB8:1415::15 activate
   neighbor 2001:1860:4000:100::1 activate
