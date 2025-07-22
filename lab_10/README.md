@@ -126,7 +126,7 @@ IPv4 адреса для оборудования берутся из преды
 # Настройка устройств:
 
 <details>
-<summary> Настройка базовых параметров</summary>
+<summary>Настройка базовых параметров</summary>
 
 Настройка произведена в [лабораторной работе № 4](../lab_04/README.md)
 
@@ -505,7 +505,7 @@ router bgp 520
 ## Настраиваем IP адресов на маршрутизаторах офиса Москва (AS1001) и процесса iBGP
 
 <details>
-<summary>  Настраиваем IP адреса на маршрутизаторах R14, R15</summary>
+<summary>Настраиваем IP адреса на маршрутизаторах R14, R15</summary>
 
 R14
 
@@ -697,8 +697,117 @@ router bgp 1001
 
 </details>
 
+## Настраиваем IP адресов на маршрутизаторах офиса С.-Петербург (AS2042) и процесса BGP с балансировкой
+
+<details>
+
+<summary>Настраиваем IP адреса на маршрутизаторе R18</summary>
+
+R18
+
+```
+!
+interface Loopback0
+ description Loopback_R18
+ ip address 10.200.100.18 255.255.255.255
+ ipv6 address 2001:DB8::2042:18/128
+ ipv6 enable
+!
+interface Ethernet0/0
+ description to_R16
+ ip address 10.20.90.21 255.255.255.252
+ ipv6 address FE80:2042::18 link-local
+ ipv6 address 2001:DB8:1618::21/64
+ ipv6 enable
+!
+interface Ethernet0/1
+ description to_R17
+ ip address 10.20.90.18 255.255.255.252
+ ipv6 address FE80:2042::18 link-local
+ ipv6 address 2001:DB8:1718::18/64
+ ipv6 enable
+!
+interface Ethernet0/2
+ description to_R24_AS520
+ ip address 67.73.193.2 255.255.255.252
+ ipv6 address 2C0F:F400:10FF:1::2/64
+ ipv6 enable
+!
+interface Ethernet0/3
+ description to_R26_AS520
+ ip address 64.210.65.2 255.255.255.252
+ ipv6 address 2C0F:F400:10FF:2::2/64
+ ipv6 enable
+!
+```
+
+</details>
+
+<details>
+
+<summary>R18 настраиваем процесс BGP и применяем балансировку на провайдера "Триада"</summary>
+
+Балансировка включается командой;
+
+```
+maximum-paths 2
+```
+
+Для выполнения балансировки ECMP должны выполняться следующие условия:
+
+- не менее двух маршрутов в таблице BGP для этой сети.
+- оба маршрута идут через одного провайдера
+- параметры Weight, Local Preference, AS-Path, Origin, MED, метрика IGP совпадают.
+- параметр Next Hop должен быть разным для двух маршрутов.
+
+Проверку полного совпадения AS-Path можно отключить, но длинна пути должна быть одинаковой.
+
+```
+bgp bestpath as-path multipath-relax
+```
+
+R18
+
+```
+!
+router bgp 2042
+ bgp router-id 10.200.100.18
+ bgp log-neighbor-changes
+ bgp bestpath as-path multipath-relax
+ neighbor 2C0F:F400:10FF:1::1 remote-as 520
+ neighbor 2C0F:F400:10FF:2::1 remote-as 520
+ neighbor 64.210.65.1 remote-as 520
+ neighbor 67.73.193.1 remote-as 520
+ !
+ address-family ipv4
+  network 64.210.65.0 mask 255.255.255.252
+  network 67.73.193.0 mask 255.255.255.252
+  no neighbor 2C0F:F400:10FF:1::1 activate
+  no neighbor 2C0F:F400:10FF:2::1 activate
+  neighbor 64.210.65.1 activate
+  neighbor 67.73.193.1 activate
+  maximum-paths 2
+ exit-address-family
+ !
+ address-family ipv6
+  maximum-paths 2
+  network 2C0F:F400:10FF:1::/64
+  network 2C0F:F400:10FF:2::/64
+  neighbor 2C0F:F400:10FF:1::1 activate
+  neighbor 2C0F:F400:10FF:2::1 activate
+ exit-address-family
+!
+
+```
+
+</details>
+
 # Проверка работоспособности
 
 <details>
 
 <summary>Таблицы маршрутизации BGP</summary>
+
+!["Таблица маршрутизации R14"](./img/bgp_R14.png)
+
+</details>
