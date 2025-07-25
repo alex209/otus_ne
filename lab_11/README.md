@@ -130,3 +130,59 @@ router bgp 2042
 !["R18 префиксы отдаваемые провайдеру"](./img/advertised-routes_R18.png)
 
 </details>
+
+<details>
+
+<summary><H2>Настройка провайдера Киторн так, чтобы в офис Москва отдавался только маршрут по умолчанию</H2></summary>
+
+```
+!
+ip route 0.0.0.0 0.0.0.0 Null0
+!
+ip prefix-list pl_DEF seq 10 permit 0.0.0.0/0
+!
+ipv6 route ::/0 Null0
+!
+ipv6 prefix-list pl_DEF_ipv6 seq 5 permit ::/0
+!
+route-map rm_DEF_ipv6 permit 10
+ match ipv6 address prefix-list pl_DEF_ipv6
+!
+route-map rm_DEF permit 10
+ match ip address prefix-list pl_DEF
+!
+```
+
+```
+!
+router bgp 101
+ !
+ address-family ipv4
+  neighbor 207.231.240.2 default-originate
+  neighbor 207.231.240.2 route-map rm_DEF out
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor 2001:1860:4000:100::2 default-originate
+  neighbor 2001:1860:4000:100::2 route-map rm_DEF_ipv6 out
+ exit-address-family
+!
+```
+
+### Проверка
+
+#### R14 префиксы получаемые от провайдера
+
+!["R14 префиксы получаемые от провайдера"](./img/get-routes_R14.png)
+
+</details>
+
+<details>
+
+<summary><H2>Настройка провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург</H2></summary>
+
+```
+
+```
+
+</details>
