@@ -187,8 +187,59 @@ router bgp 101
 
 <summary><H2>Настройка провайдера Ламас так, чтобы в офис Москва отдавался только маршрут по умолчанию и префикс офиса С.-Петербург</H2></summary>
 
-```
+Создаем маршруты по умолчанию и route-map для фильтрации анонсируемых префиксов.
 
 ```
+ip route 0.0.0.0 0.0.0.0 Null0
+!
+ip prefix-list pl_DEF_SPB seq 10 permit 67.73.193.0/30
+ip prefix-list pl_DEF_SPB seq 20 permit 64.210.65.0/30
+ip prefix-list pl_DEF_SPB seq 30 permit 0.0.0.0/0
+!
+ipv6 route ::/0 Null0
+!
+ipv6 prefix-list pl_DEF_SPB_ipv6 seq 10 permit 2C0F:F400:10FF:1::/64
+ipv6 prefix-list pl_DEF_SPB_ipv6 seq 20 permit 2C0F:F400:10FF:2::/64
+ipv6 prefix-list pl_DEF_SPB_ipv6 seq 30 permit ::/0
+!
+route-map rm_DEF_SPB permit 10
+ match ip address prefix-list pl_DEF_SPB
+!
+route-map rm_DEF_SPB_ipv6 permit 10
+ match ipv6 address prefix-list pl_DEF_SPB_ipv6
+!
+
+```
+
+Настраиваем передачу маршрута по умолчанию и передачи необходимых префиксов префиксов.
+
+```
+!
+router bgp 301
+ !
+ address-family ipv4
+  neighbor 128.249.190.2 default-originate
+  neighbor 128.249.190.2 route-map rm_DEF_SPB out
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor 2001:468:1A08:1001::2 default-originate
+  neighbor 2001:468:1A08:1001::2 route-map rm_DEF_SPB_ipv6 out
+ exit-address-family
+!
+
+```
+
+### Проверка
+
+#### R15 префиксы получаемые от провайдера
+
+!["R15 префиксы получаемые от провайдера"](./img/get-routes_R15.png)
+
+</details>
+
+<details>
+
+<summary><H2>Проверка IP связности сетей</H2></summary>
 
 </details>
