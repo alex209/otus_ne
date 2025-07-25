@@ -24,7 +24,7 @@
 
 <details>
 
-<summary><H2> Настройка фильтрации в офисе Москва (As-path)</H2></summary>
+<summary><H2>Настройка фильтрации в офисе Москва (As-path)</H2></summary>
 
 При подключении к двум провайдерам возможна ситуации, когда **"наша"** AS может стать транзитной из-за того, что он анонсирует сети провайдеров друг другу. Чтобы предотвратить такое поведение "наша" AS должна анонсировать только **"свои"** сети, т.е. с пустым значением AS path.
 
@@ -80,10 +80,53 @@ router bgp 1001
 
 !["R15 префиксы отдаваемые провайдеру"](./img/advertised-routes_R15.png)
 
+Задача по предотвращению появления транзитного трафика в офисе Москва выполнена.
+
 </details>
 
 <details>
 
-<summary>Настройка </summary>
+<summary><H2>Настройка фильтрации в офисе С.-Петербург (Prefix-list)</H2></summary>
+
+Проблема с транзитным трафиком в офисе С.-Петербург аналогична проблеме в офисе Москва. Для ее решения используем prefix-list.
+
+### Создаем prefix-list на R18
+
+```
+!
+ip prefix-list pl_OUT seq 10 permit 67.73.193.0/30
+ip prefix-list pl_OUT seq 20 permit 64.210.65.0/30
+!
+!
+ipv6 prefix-list pl_OUT_v6 seq 10 permit 2C0F:F400:10FF:1::/64
+ipv6 prefix-list pl_OUT_v6 seq 20 permit 2C0F:F400:10FF:2::/64
+!
+
+```
+
+### Применяем prefix-list на вышестоящего провайдера
+
+```
+!
+router bgp 2042
+ !
+ address-family ipv4
+  neighbor 64.210.65.1 prefix-list pl_OUT out
+  neighbor 67.73.193.1 prefix-list pl_OUT out
+ exit-address-family
+ !
+ address-family ipv6
+  neighbor 2C0F:F400:10FF:1::1 prefix-list pl_OUT_v6 out
+  neighbor 2C0F:F400:10FF:2::1 prefix-list pl_OUT_v6 out
+ exit-address-family
+!
+
+```
+
+### Проверка
+
+#### R18 префиксы отдаваемые провайдеру
+
+!["R18 префиксы отдаваемые провайдеру"](./img/advertised-routes_R18.png)
 
 </details>
