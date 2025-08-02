@@ -29,9 +29,6 @@ mmi snmp-timeout 180
 !
 !
 !
-
-
-!
 !
 !
 !

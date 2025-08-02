@@ -29,9 +29,6 @@ mmi snmp-timeout 180
 !
 !
 !
-
-
-!
 !
 !
 !
@@ -51,8 +48,6 @@ multilink bundle-name authenticated
 !
 !
 redundancy
-!
-!
 !
 !
 !

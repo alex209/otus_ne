@@ -10,7 +10,7 @@
 
 ### Топология сети
 
-![](./img/lab_10.png)
+![](./img/lab_12.png)
 
 ### Задачи
 
@@ -32,8 +32,95 @@
 
 <summary><H3>Настроите NAT(PAT) на R14 и R15 в офисе Москва</H3></summary>
 
+### Создаем списки доступа кому разрешен выход во внешние сети
+
+#### R14 и R15
+
+```
+access-list 101 permit ip 192.168.10.0 0.0.0.255 any
+access-list 101 permit ip 192.168.20.0 0.0.0.255 any
+access-list 101 permit ip 10.100.100.0 0.0.0.255 any
+access-list 101 permit ip 10.10.90.0 0.0.0.255 any
 ```
 
+### Определяем внутренние и внешние интерфейсы
+
+#### R14
+
+```
+interface Ethernet0/0
+ description to_R12
+ ip address 10.10.90.2 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/1
+ description to_R13
+ ip address 10.10.90.9 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/2
+ description to_R22_AS101
+ ip address 207.231.240.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/3
+ description to_R19
+ ip address 10.10.90.34 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet1/0
+ description to_R15
+ ip address 10.10.90.41 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+```
+
+#### R15
+
+```
+interface Ethernet0/0
+ description to_R13
+ ip address 10.10.90.6 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/1
+ description to_R12
+ ip address 10.10.90.14 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/2
+ description to_R21_AS301
+ ip address 128.249.190.2 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/3
+ description to_R20
+ ip address 10.10.90.38 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet1/0
+ description to_R14
+ ip address 10.10.90.42 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+```
+
+### Создаем динамическую трансляцию между внутренним локальным и внешним глобальным адресами
+
+#### R14 и R15
+
+```
+ip nat inside source list 101 interface Ethernet0/2 overload
 ```
 
 </details>
