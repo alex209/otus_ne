@@ -124,3 +124,9 @@ ip nat inside source list 101 interface Ethernet0/2 overload
 ```
 
 </details>
+
+<details>
+
+<summary><H3>Настройка для IPv4 DHCP сервер в офисе Москва на маршрутизаторах R12 и R13</H3></summary>
+
+</details>
