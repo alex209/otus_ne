@@ -1,0 +1,262 @@
+!
+! Last configuration change at 14:18:32 MSK Sat Aug 2 2025
+! NVRAM config last updated at 14:08:31 MSK Sat Aug 2 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R15
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Q5iJ$urHN0vkghBI81.8bEyroG.
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R15
+ ip address 10.100.100.15 255.255.255.255
+ ipv6 address 2001:DB8::1001:15/128
+ ipv6 enable
+ ospfv3 1 ipv4 area 0
+ ospfv3 1 ipv6 area 0
+!
+interface Ethernet0/0
+ description to_R13
+ ip address 10.10.90.6 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1315::15/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/1
+ description to_R12
+ ip address 10.10.90.14 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1215::15/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/2
+ description to_R21_AS301
+ ip address 128.249.190.2 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address 2001:468:1A08:1001::2/64
+ ipv6 enable
+!
+interface Ethernet0/3
+ description to_R20
+ ip address 10.10.90.38 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1520::15/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 102
+ ospfv3 1 ipv6 area 102
+!
+interface Ethernet1/0
+ description to_R14
+ ip address 10.10.90.42 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1415::15/64
+ ipv6 enable
+ ospfv3 1 cost 60
+ ospfv3 1 ipv4 area 0
+ ospfv3 1 ipv6 area 0
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+router ospfv3 1
+ router-id 10.100.100.15
+ area 10 stub
+ !
+ address-family ipv4 unicast
+  passive-interface Loopback0
+  area 102 filter-list prefix AREA_101 in
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  passive-interface Loopback0
+  area 102 filter-list prefix AREA_101_v6 in
+ exit-address-family
+!
+router bgp 1001
+ bgp router-id 10.100.100.15
+ bgp log-neighbor-changes
+ neighbor 10.10.90.41 remote-as 1001
+ neighbor 2001:468:1A08:1001::1 remote-as 301
+ neighbor 2001:DB8:1415::14 remote-as 1001
+ neighbor 128.249.190.1 remote-as 301
+ !
+ address-family ipv4
+  network 10.10.90.40 mask 255.255.255.252
+  network 128.249.190.0 mask 255.255.255.248
+  neighbor 10.10.90.41 activate
+  no neighbor 2001:468:1A08:1001::1 activate
+  no neighbor 2001:DB8:1415::14 activate
+  neighbor 128.249.190.1 activate
+  neighbor 128.249.190.1 prefix-list pl_RFC_1918 out
+  neighbor 128.249.190.1 route-map rm_ALL_OFFICE in
+  neighbor 128.249.190.1 filter-list 1 out
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001:468:1A08:1001::/64
+  network 2001:DB8:1415::/64
+  neighbor 2001:468:1A08:1001::1 activate
+  neighbor 2001:468:1A08:1001::1 route-map rm_ALL_OFFICE_v6 in
+  neighbor 2001:468:1A08:1001::1 filter-list 1 out
+  neighbor 2001:DB8:1415::14 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip as-path access-list 1 permit ^$
+!
+no ip http server
+no ip http secure-server
+ip nat inside source list 101 interface Ethernet0/2 overload
+ip nat inside source static 10.100.100.20 128.249.190.3
+!
+!
+ip prefix-list ALL_OFFICE seq 10 permit 67.73.193.0/30
+ip prefix-list ALL_OFFICE seq 20 permit 64.210.65.0/30
+ip prefix-list ALL_OFFICE seq 30 permit 67.73.196.0/30
+ip prefix-list ALL_OFFICE seq 40 permit 8.242.244.0/30
+ip prefix-list ALL_OFFICE seq 50 permit 67.73.196.4/30
+!
+ip prefix-list AREA_101 seq 10 deny 10.100.100.19/32
+ip prefix-list AREA_101 seq 20 deny 10.10.90.32/30
+ip prefix-list AREA_101 seq 30 permit 0.0.0.0/0 le 32
+!
+ip prefix-list pl_RFC_1918 seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list pl_RFC_1918 seq 20 deny 172.16.0.0/12 le 32
+ip prefix-list pl_RFC_1918 seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list pl_RFC_1918 seq 40 permit 0.0.0.0/0 le 32
+!
+!
+ipv6 prefix-list ALL_OFFICE_v6 seq 10 permit 2C0F:F400:10FF:1::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 20 permit 2C0F:F400:10FF:2::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 30 permit 2001:678:ADC:2528::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 40 permit 2001:67C:94C:2628::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 50 permit 2001:678:5B0:2527::/64
+!
+ipv6 prefix-list AREA_101_v6 seq 10 deny 2001:DB8::1001:20/128
+ipv6 prefix-list AREA_101_v6 seq 20 deny 2001:DB8:1419::/64
+ipv6 prefix-list AREA_101_v6 seq 30 permit ::/0 le 128
+route-map rm_ALL_OFFICE_v6 permit 10
+ match ipv6 address prefix-list ALL_OFFICE_v6
+ set local-preference 300
+!
+route-map rm_ALL_OFFICE_v6 permit 20
+!
+route-map rm_ALL_OFFICE permit 10
+ match ip address prefix-list ALL_OFFICE
+ set local-preference 300
+!
+route-map rm_ALL_OFFICE permit 20
+!
+!
+access-list 101 permit ip 192.168.10.0 0.0.0.255 any
+access-list 101 permit ip 192.168.20.0 0.0.0.255 any
+access-list 101 permit ip 10.100.100.0 0.0.0.255 any
+access-list 101 permit ip 10.10.90.0 0.0.0.255 any
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 104D000A0618
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 121A0C041104
+ login
+ transport input none
+!
+ntp update-calendar
+ntp server 10.100.100.12
+ntp server 10.100.100.13
+!
+end
