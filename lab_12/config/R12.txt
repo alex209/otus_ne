@@ -1,0 +1,179 @@
+!
+! Last configuration change at 12:01:29 MSK Fri Aug 1 2025
+! NVRAM config last updated at 10:26:09 MSK Sun Aug 3 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R12
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$tUuN$O61hDJ/R2H0pQJ53GOnbC0
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 192.168.10.1
+ip dhcp excluded-address 192.168.20.1
+!
+ip dhcp pool CLIENT10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+!
+ip dhcp pool CLIENT20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R12
+ ip address 10.100.100.12 255.255.255.255
+ ipv6 address 2001:DB8::1001:12/128
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/0
+ description to_SW4
+ ip address 10.10.90.18 255.255.255.252
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+!
+interface Ethernet0/1
+ description to_SW5
+ ip address 10.10.90.29 255.255.255.252
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+!
+interface Ethernet0/2
+ description to_R14
+ ip address 10.10.90.1 255.255.255.252
+ ipv6 address FE80::12 link-local
+ ipv6 address 2001:DB8:1214::12/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/3
+ description to_R15
+ ip address 10.10.90.13 255.255.255.252
+ ipv6 address FE80::12 link-local
+ ipv6 address 2001:DB8:1215::12/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+router ospfv3 1
+ router-id 10.100.100.12
+ area 10 stub
+ !
+ address-family ipv4 unicast
+  passive-interface Loopback0
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  passive-interface Loopback0
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 094F471A1A0A
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 00071A150754
+ login
+ transport input none
+!
+ntp source Loopback0
+ntp master 3
+ntp update-calendar
+ntp server 207.231.240.1
+!
+end

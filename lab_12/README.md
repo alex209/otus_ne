@@ -129,4 +129,85 @@ ip nat inside source list 101 interface Ethernet0/2 overload
 
 <summary><H3>Настройка для IPv4 DHCP сервер в офисе Москва на маршрутизаторах R12 и R13</H3></summary>
 
+#### R12
+
+```
+!
+ip dhcp excluded-address 192.168.10.1
+ip dhcp excluded-address 192.168.20.1
+!
+ip dhcp pool CLIENT10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+!
+ip dhcp pool CLIENT20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+!
+```
+
+#### R13
+
+```
+!
+ip dhcp excluded-address 192.168.10.1
+ip dhcp excluded-address 192.168.20.1
+ip dhcp excluded-address 192.168.10.2 192.168.10.127
+ip dhcp excluded-address 192.168.20.2 192.168.20.127
+!
+ip dhcp pool CLIENT10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+!
+ip dhcp pool CLIENT20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+!
+
+```
+
+На коммутаторах SW4 и SW5 настраиваем SVI интерфейсы и VRRP на этих интерфейсах, а также указываем helper адрес через который происходит пересылка широковещательного пакета от клиента одноадресатным пакетом DHCP-серверу.
+
+#### SW4
+
+```
+interface Vlan10
+ description VLAN 10
+ ip address 192.168.10.4 255.255.255.0
+ ip helper-address 10.100.100.12
+ ip helper-address 10.100.100.13
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 10 description VLAN10
+ vrrp 10 ip 192.168.10.1
+ vrrp 10 priority 110
+!
+interface Vlan20
+ description VLAN20
+ ip address 192.168.20.4 255.255.255.0
+ ip helper-address 10.100.100.12
+ ip helper-address 10.100.100.13
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 20 description VLAN20
+ vrrp 20 ip 192.168.20.1
+ vrrp 20 priority 110
+!
+interface Vlan100
+ description MGMT
+ ip address 10.100.100.204 255.255.255.192
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 100 description MGMT
+ vrrp 100 ip 10.100.100.193
+ vrrp 100 priority 110
+!
+```
+
+#### SW4
+
+```
+
+```
+
 </details>

@@ -1,0 +1,160 @@
+!
+! Last configuration change at 12:01:14 MSK Fri Aug 1 2025
+! NVRAM config last updated at 10:43:53 MSK Sun Aug 3 2025
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname SW5
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$T2n.$dTEVpLgwl2nCBETLFtSwQ0
+!
+no aaa new-model
+clock timezone MSK 3 0
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet1/0
+ description to_R13
+ no switchport
+ ip address 10.10.90.21 255.255.255.252
+ duplex auto
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+!
+interface Ethernet1/1
+ description to_R12
+ no switchport
+ ip address 10.10.90.30 255.255.255.252
+ duplex auto
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Vlan10
+ description VLAN10
+ ip address 192.168.10.5 255.255.255.0
+ ip helper-address 10.100.100.12
+ ip helper-address 10.100.100.13
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 10 description VLAN10
+ vrrp 10 ip 192.168.10.1
+!
+interface Vlan20
+ description VLAN20
+ ip address 192.168.20.5 255.255.255.0
+ ip helper-address 10.100.100.12
+ ip helper-address 10.100.100.13
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 20 ip 192.168.20.1
+!
+interface Vlan100
+ description MGMT
+ ip address 10.100.100.205 255.255.255.192
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 100 description MGMT
+ vrrp 100 ip 10.100.100.193
+!
+router ospfv3 1
+ router-id 10.100.100.205
+ area 10 stub
+ !
+ address-family ipv4 unicast
+  passive-interface Vlan10
+  passive-interface Vlan20
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 0822455D0A16
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 104D000A0618
+ login
+!
+ntp update-calendar
+ntp server 10.100.100.12
+ntp server 10.100.100.13
+!
+end
