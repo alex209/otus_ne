@@ -1,0 +1,220 @@
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R28
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$qJ5C$FKGMTYezpTmiimNZOC6l//
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+track 1 ip sla 1 reachability
+ delay down 30 up 15
+!
+track 2 ip sla 2 reachability
+ delay down 30 up 15
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R28
+ ip address 10.200.200.28 255.255.255.255
+!
+interface Ethernet0/0
+ description to_R26_AS520
+ ip address 8.242.244.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address 2001:67C:94C:2628::2/64
+ ipv6 enable
+!
+interface Ethernet0/1
+ description to_R25_AS520
+ ip address 67.73.196.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address 2001:678:ADC:2528::2/64
+ ipv6 enable
+!
+interface Ethernet0/2
+ no ip address
+!
+interface Ethernet0/2.12
+ description Client VLAN 12
+ encapsulation dot1Q 12
+ ip address 192.168.12.1 255.255.255.0
+ ip nat inside
+ ip nat enable
+ ip virtual-reassembly in
+ ip policy route-map rm_TRACKING
+!
+interface Ethernet0/2.22
+ description Client VLAN 22
+ encapsulation dot1Q 22
+ ip address 192.168.22.1 255.255.255.0
+ ip nat inside
+ ip nat enable
+ ip virtual-reassembly in
+ ip policy route-map rm_TRACKING
+!
+interface Ethernet0/2.102
+ description MGMT
+ encapsulation dot1Q 102
+ ip address 10.200.200.193 255.255.255.192
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat inside source route-map rm_NAT_via_e0/0 interface Ethernet0/0 overload
+ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
+ip route 0.0.0.0 0.0.0.0 67.73.196.1 10 track 1
+ip route 0.0.0.0 0.0.0.0 8.242.244.1 20 track 2
+!
+ip sla 1
+ icmp-echo 67.73.196.1 source-ip 67.73.196.2
+ frequency 10
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 8.242.244.1 source-ip 8.242.244.2
+ frequency 10
+ip sla schedule 2 life forever start-time now
+!
+route-map rm_NAT_via_e0/1 permit 10
+ match ip address 112 122
+ match interface Ethernet0/1
+ set ip next-hop 67.73.196.1
+!
+route-map rm_NAT_via_e0/0 permit 10
+ match ip address 122 112
+ match interface Ethernet0/0
+ set ip next-hop 8.242.244.1
+!
+route-map rm_TRACKING permit 10
+ match ip address 112
+ set ip next-hop verify-availability 67.73.196.1 10 track 1
+ set ip next-hop verify-availability 8.242.244.1 20 track 2
+!
+route-map rm_TRACKING permit 20
+ match ip address 122
+ set ip next-hop verify-availability 8.242.244.1 10 track 2
+ set ip next-hop verify-availability 67.73.196.1 20 track 1
+!
+!
+access-list 112 permit ip 192.168.12.0 0.0.0.255 any
+access-list 122 permit ip 192.168.22.0 0.0.0.255 any
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 00071A150754
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 13061E010803
+ login
+ transport input none
+!
+event manager applet TR1_Down
+ event track 1 state down
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+event manager applet TR1_Up
+ event track 1 state up
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+event manager applet TR2_Down
+ event track 2 state down
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+event manager applet TR2_Up
+ event track 2 state up
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+!
+end
