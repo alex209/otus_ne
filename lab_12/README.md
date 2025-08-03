@@ -681,3 +681,5 @@ ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
 !["R27 пинги на все офисы"](./img/ping_r27.png)
 
 </details>
+
+### [Файлы конфигураций устройств ](./config/)
