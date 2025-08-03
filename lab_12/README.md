@@ -639,3 +639,13 @@ ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
 !["статистика NAT на R28"](./img/nat_st_r28.png)
 
 </details>
+
+<details>
+
+<summary><H3>Проверка IP связности</H3></summary>
+
+[Пинги из офиса Москва VPC1 ](https://github.com/alex209/otus_ne/tree/main/lab_12#%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-ip-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%B0-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-nat-%D0%BD%D0%B0-vpc1)
+
+[Пинги из офиса Москва VPC7 ](https://github.com/alex209/otus_ne/tree/main/lab_12#%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-ip-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%B0-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-nat-%D0%BD%D0%B0-vpc7)
+
+</details>
