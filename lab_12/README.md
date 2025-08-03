@@ -501,4 +501,141 @@ interface Vlan21
 
 NAT в офисе Чокурдах был ранее настроен в лабораторной работе #5
 
+#### Определяем внутренние и внешние интерфейсы на R28
+
+```
+!
+interface Ethernet0/0
+ description to_R26_AS520
+ ip address 8.242.244.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/1
+ description to_R25_AS520
+ ip address 67.73.196.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/2
+ no ip address
+!
+interface Ethernet0/2.12
+ description Client VLAN 12
+ encapsulation dot1Q 12
+ ip address 192.168.12.1 255.255.255.0
+ ip nat inside
+ ip nat enable
+ ip virtual-reassembly in
+ ip policy route-map rm_TRACKING
+!
+interface Ethernet0/2.22
+ description Client VLAN 22
+ encapsulation dot1Q 22
+ ip address 192.168.22.1 255.255.255.0
+ ip nat inside
+ ip nat enable
+ ip virtual-reassembly in
+ ip policy route-map rm_TRACKING
+!
+```
+
+#### создаем аксес листы для локальных сетей
+
+```
+!
+access-list 112 permit ip 192.168.12.0 0.0.0.255 any
+access-list 122 permit ip 192.168.22.0 0.0.0.255 any
+
+```
+
+#### настраиваем Service Level Agreements и track для внешних шлюзов
+
+```
+!
+ip sla 1
+ icmp-echo 67.73.196.1 source-ip 67.73.196.2
+ frequency 10
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 8.242.244.1 source-ip 8.242.244.2
+ frequency 10
+ip sla schedule 2 life forever start-time now
+!
+
+!
+track 1 ip sla 1 reachability
+ delay down 30 up 15
+!
+track 2 ip sla 2 reachability
+ delay down 30 up 15
+
+```
+
+#### настраиваем маршруты по умолчанию и включаем на них tracking
+
+```
+ip route 0.0.0.0 0.0.0.0 67.73.196.1 10 track 1
+ip route 0.0.0.0 0.0.0.0 8.242.244.1 20 track 2
+!
+
+```
+
+#### настраиваем Route Map для tracking
+
+```
+route-map rm_TRACKING permit 10
+ match ip address 112
+ set ip next-hop verify-availability 67.73.196.1 10 track 1
+ set ip next-hop verify-availability 8.242.244.1 20 track 2
+!
+route-map rm_TRACKING permit 20
+ match ip address 122
+ set ip next-hop verify-availability 8.242.244.1 10 track 2
+ set ip next-hop verify-availability 67.73.196.1 20 track 1
+
+```
+
+#### настраиваем Route Map для NAT
+
+```
+!
+route-map rm_NAT_via_e0/1 permit 10
+ match ip address 112 122
+ match interface Ethernet0/1
+ set ip next-hop 67.73.196.1
+!
+route-map rm_NAT_via_e0/0 permit 10
+ match ip address 122 112
+ match interface Ethernet0/0
+ set ip next-hop 8.242.244.1
+
+```
+
+#### включаем NAT
+
+```
+ip nat inside source route-map rm_NAT_via_e0/0 interface Ethernet0/0 overload
+ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
+!
+```
+
+### Проверка работы NAT в офисе Чокурдах
+
+#### VPC30 пинги на все офисы
+
+!["VPC30 пинги на все офисы"](./img/ping_vpc30.png)
+
+#### VPC31 пинги на все офисы
+
+!["VPC31 пинги на все офисы"](./img/ping_vpc31.png)
+
+#### таблица NAT на R28
+
+!["таблица NAT на R28"](./img/nat_tr_r28.png)
+
+#### статистика NAT на R28
+
+!["статистика NAT на R28"](./img/nat_st_r28.png)
+
 </details>
