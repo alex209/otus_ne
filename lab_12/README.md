@@ -185,7 +185,6 @@ interface Vlan10
  ip helper-address 10.100.100.12
  ip helper-address 10.100.100.13
  ipv6 enable
- ospfv3 1 ipv4 area 10
  vrrp 10 description VLAN10
  vrrp 10 ip 192.168.10.1
  vrrp 10 priority 110
@@ -196,7 +195,6 @@ interface Vlan20
  ip helper-address 10.100.100.12
  ip helper-address 10.100.100.13
  ipv6 enable
- ospfv3 1 ipv4 area 10
  vrrp 20 description VLAN20
  vrrp 20 ip 192.168.20.1
  vrrp 20 priority 110
@@ -205,7 +203,6 @@ interface Vlan100
  description MGMT
  ip address 10.100.100.204 255.255.255.192
  ipv6 enable
- ospfv3 1 ipv4 area 10
  vrrp 100 description MGMT
  vrrp 100 ip 10.100.100.193
  vrrp 100 priority 110
@@ -222,7 +219,6 @@ interface Vlan10
  ip helper-address 10.100.100.12
  ip helper-address 10.100.100.13
  ipv6 enable
- ospfv3 1 ipv4 area 10
  vrrp 10 description VLAN10
  vrrp 10 ip 192.168.10.1
 !
@@ -232,14 +228,12 @@ interface Vlan20
  ip helper-address 10.100.100.12
  ip helper-address 10.100.100.13
  ipv6 enable
- ospfv3 1 ipv4 area 10
  vrrp 20 ip 192.168.20.1
 !
 interface Vlan100
  description MGMT
  ip address 10.100.100.205 255.255.255.192
  ipv6 enable
- ospfv3 1 ipv4 area 10
  vrrp 100 description MGMT
  vrrp 100 ip 10.100.100.193
 !
@@ -348,5 +342,41 @@ crypto key generate rsa
 #### R27
 
 !["NTP SW5"](./img/ssh_r27.png)
+
+</details>
+
+<details>
+
+<summary><H3>Настройка статического NAT для R20 </H3></summary>
+
+Настройку будем производить на R15
+
+#### R15
+
+```
+ip nat inside source static 10.100.100.20 128.249.190.3
+```
+
+На R20 включаем доступ по telnet
+
+```
+line vty 0 4
+ password 7 14141B180F0B
+ login
+ transport input telnet
+!
+```
+
+### Проверка доступа к R20 c R27
+
+#### R27
+
+!["NTP SW5"](./img/telnet_r27.png)
+
+</details>
+
+<details>
+
+<summary><H3>Настройка NAT для R18 в офисе С.-Петербург</H3></summary>
 
 </details>
