@@ -644,12 +644,24 @@ ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
 
 <summary><H3>Проверка IP связности</H3></summary>
 
-#### Пинги из офиса Москва VPC1
+## Офис Москва
+
+### Пинги из офиса Москва VPC1
 
 !["Пинги из офиса Москва VPC1"](./img/ping_vpc1.png)
 
-#### Пинги из офиса Москва VPC7
+### Пинги из офиса Москва VPC7
 
 !["Пинги из офиса Москва VPC7"](./img/ping_vpc7.png)
+
+## Офис С.-Петербург
+
+### VPC8 пинги на все офисы
+
+!["VPC8 пинги на все офисы"](./img/ping_vpc8.png)
+
+### VPC пинги на все офисы
+
+!["VPC пинги на все офисы"](./img/ping_vpc.png)
 
 </details>
