@@ -1,0 +1,157 @@
+!
+! Last configuration change at 14:41:58 UTC Fri Aug 1 2025
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname SW10
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$pAss$jNqC/858SW69zCSTgnUmH/
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_SW10
+ ip address 10.200.100.210 255.255.255.255
+ ipv6 address 2001:DB8::2042:210/128
+ ipv6 enable
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode passive
+!
+interface Ethernet0/2
+ switchport access vlan 21
+ switchport mode access
+!
+interface Ethernet0/3
+ description to_R16
+ no switchport
+ ip address 10.20.90.6 255.255.255.252
+ duplex auto
+ ipv6 address FE80:2042::10 link-local
+ ipv6 address 2001:DB8:2042:1016::6/64
+ ipv6 enable
+!
+interface Ethernet1/0
+ description to_R17
+ no switchport
+ ip address 10.20.90.14 255.255.255.252
+ duplex auto
+ ipv6 address FE80:2042::10 link-local
+ ipv6 address 2001:DB8:2042:1017::14/64
+ ipv6 enable
+!
+interface Ethernet1/1
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Vlan11
+ ip address 192.168.11.10 255.255.255.0
+ vrrp 11 description VLAN11
+ vrrp 11 ip 192.168.11.1
+!
+interface Vlan21
+ ip address 192.168.21.10 255.255.255.0
+ vrrp 21 description VLAN 21
+ vrrp 21 ip 192.168.21.1
+!
+!
+router eigrp AS2042
+ !
+ address-family ipv4 unicast autonomous-system 2042
+  !
+  topology base
+  exit-af-topology
+  network 10.20.90.4 0.0.0.3
+  network 10.20.90.12 0.0.0.3
+  network 10.200.100.210 0.0.0.0
+  network 192.168.11.0
+  network 192.168.21.0
+  eigrp router-id 10.200.100.210
+ exit-address-family
+ !
+ address-family ipv6 unicast autonomous-system 2042
+  !
+  topology base
+  exit-af-topology
+  eigrp router-id 10.200.100.210
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 02050D480809
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 1511021F0725
+ login
+!
+!
+end

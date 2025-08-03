@@ -379,4 +379,100 @@ line vty 0 4
 
 <summary><H3>Настройка NAT для R18 в офисе С.-Петербург</H3></summary>
 
+Определяем внутренние и внешние интерфейсы на R18
+
+```
+interface Ethernet0/0
+ description to_R16
+ ip address 10.20.90.21 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/1
+ description to_R17
+ ip address 10.20.90.18 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/2
+ description to_R24_AS520
+ ip address 67.73.193.2 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/3
+ description to_R26_AS520
+ ip address 64.210.65.2 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+!
+```
+
+Создаем списки доступа на R18
+
+```
+access-list 101 permit ip 10.200.100.0 0.0.0.255 any
+access-list 101 permit ip 192.168.11.0 0.0.0.255 any
+access-list 101 permit ip 192.168.21.0 0.0.0.255 any
+access-list 101 permit ip 10.20.90.0 0.0.0.255 any
+```
+
+В лабораторной работе № 10 на R18 мы настроили балансировку для исходящего трафика, в связи с этим настраиваем route-map для каждого внешнего интерфейса.
+
+```
+route-map rm_NAT_via_e0/3 permit 10
+ match ip address 101
+ match interface Ethernet0/3
+!
+route-map rm_NAT_via_e0/2 permit 10
+ match ip address 101
+ match interface Ethernet0/2
+!
+```
+
+создаем pool nat и включаем NAT
+
+```
+ip nat pool pl_NAT_e0/3 64.210.65.2 64.210.65.6 netmask 255.255.255.248
+ip nat pool pl_NAT_e0/2 67.73.193.2 67.73.193.6 netmask 255.255.255.248
+ip nat inside source route-map rm_NAT_via_e0/2 pool pl_NAT_e0/2 overload
+ip nat inside source route-map rm_NAT_via_e0/3 pool pl_NAT_e0/3 overload
+```
+
+На коммутаторах SW9 и SW10 настаиваем SVI и VRRP
+
+#### SW9
+
+```
+!
+interface Vlan11
+ ip address 192.168.11.9 255.255.255.0
+ vrrp 11 description VLAN11
+ vrrp 11 ip 192.168.11.1
+ vrrp 11 priority 110
+!
+interface Vlan21
+ ip address 192.168.21.9 255.255.255.0
+ vrrp 21 description VLAN21
+ vrrp 21 ip 192.168.21.1
+ vrrp 21 priority 110
+!
+```
+
+#### SW10
+
+```
+!
+interface Vlan11
+ ip address 192.168.11.10 255.255.255.0
+ vrrp 11 description VLAN11
+ vrrp 11 ip 192.168.11.1
+!
+interface Vlan21
+ ip address 192.168.21.10 255.255.255.0
+ vrrp 21 description VLAN 21
+ vrrp 21 ip 192.168.21.1
+!
+```
+
 </details>
