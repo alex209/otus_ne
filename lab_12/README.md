@@ -664,4 +664,20 @@ ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
 
 !["VPC пинги на все офисы"](./img/ping_vpc.png)
 
+## Офис Чокурдах
+
+### VPC30 пинги на все офисы
+
+!["VPC30 пинги на все офисы"](./img/ping_vpc30.png)
+
+### VPC31 пинги на все офисы
+
+!["VPC31 пинги на все офисы"](./img/ping_vpc31.png)
+
+## Офис Лабытнанги
+
+### R27 пинги на все офисы
+
+!["R27 пинги на все офисы"](./img/ping_r27.png)
+
 </details>
