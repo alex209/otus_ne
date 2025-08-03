@@ -148,6 +148,14 @@ ip dhcp pool CLIENT20
 
 #### R13
 
+Т.к. R12 и R13 одновременно отвечают на DHCP запрос R13 сдвинем пул выдаваемых адресов для предотвращения конфликта адресов.
+
+```
+ip dhcp excluded-address 192.168.10.2 192.168.10.127
+ip dhcp excluded-address 192.168.20.2 192.168.20.127
+
+```
+
 ```
 !
 ip dhcp excluded-address 192.168.10.1
@@ -204,10 +212,141 @@ interface Vlan100
 !
 ```
 
+#### SW5
+
+```
+!
+interface Vlan10
+ description VLAN10
+ ip address 192.168.10.5 255.255.255.0
+ ip helper-address 10.100.100.12
+ ip helper-address 10.100.100.13
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 10 description VLAN10
+ vrrp 10 ip 192.168.10.1
+!
+interface Vlan20
+ description VLAN20
+ ip address 192.168.20.5 255.255.255.0
+ ip helper-address 10.100.100.12
+ ip helper-address 10.100.100.13
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 20 ip 192.168.20.1
+!
+interface Vlan100
+ description MGMT
+ ip address 10.100.100.205 255.255.255.192
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ vrrp 100 description MGMT
+ vrrp 100 ip 10.100.100.193
+!
+```
+
+</details>
+
+<details>
+
+<summary><H3>Проверка работы DHCP и NAT в Московском офисе.</H3></summary>
+
+#### Получение IP адреса проверка работы NAT на VPC1
+
+!["Получение IP адреса проверка работы NAT на VPC1"](./img/ping_vpc1.png)
+
+#### Получение IP адреса проверка работы NAT на VPC7
+
+!["Получение IP адреса проверка работы NAT на VPC7"](./img/ping_vpc7.png)
+
+#### dhcp lease на R12
+
+!["dhcp lease на R12"](./img/dhcp_r12.png)
+
+#### Таблица nat translations на R15
+
+В лабораторной работе № 10 мы установили провайдера "Ламас" как приоритетный, поэтому весь исходящий трафик пойдет через R15
+
+!["Таблица nat translations на R15"](./img/nat_tr_r15.png)
+
+</details>
+
+<details>
+
+<summary><H3>Настройка NTP сервера на R12 и R13 и синхронизация всех устройств в ними</H3></summary>
+
+#### R12 и R13
+
+```
+!
+ntp source Loopback0
+ntp master 3
+ntp update-calendar
+ntp server 207.231.240.1
+```
+
+#### На остальных устройствах
+
+```
+!
+ntp update-calendar
+ntp server 10.100.100.12
+ntp server 10.100.100.13
+!
+
+```
+
+### Проверка работы NTP
+
 #### SW4
 
-```
+!["NTP SW4"](./img/ntp_sw4.png)
+
+#### SW5
+
+!["NTP SW5"](./img/ntp_sw5.png)
+
+</details>
+
+<details>
+
+<summary><H3>Настройка NAT для удаленного доступа к R19 с любого устройства</H3></summary>
+
+Настройку будем производить на R14
+
+#### R14
 
 ```
+ip nat inside source static tcp 10.100.100.19 22 207.231.240.2 22 extendable
+```
+
+На R19 включаем доступ по SSH
+
+#### R19 (пароль **cisco**)
+
+```
+aaa new-model
+ip domain name r19.msk.local
+username admin privilege 15 password 7 070C285F4D06
+ip ssh version 2
+!
+line vty 0 4
+ exec-timeout 60 0
+ logging synchronous
+ transport input ssh
+!
+```
+
+Генерация SSH ключей
+
+```
+crypto key generate rsa
+```
+
+### Проверка доступа к R19 c R27
+
+#### R27
+
+!["NTP SW5"](./img/ssh_r27.png)
 
 </details>
