@@ -102,6 +102,10 @@ interface Tunnel1
 
 !["tun1 R18"](./img/tun1_r18.png)
 
+#### пинги с R18 на адреса туннелей R14 и R15
+
+!["пинги с R18 на адреса туннелей R14 и R15"](./img/ping_r18_tun.png)
+
 </details>
 
 <details>
