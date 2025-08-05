@@ -215,4 +215,12 @@ interface Tunnel10
 
 !["nhrp R28"](./img/nhrp_r28.png)
 
+#### пинги от R27
+
+!["пинги от R27"](./img/ping_r27.png)
+
+#### пинги от R28
+
+!["пинги от R28"](./img/ping_r28.png)
+
 </details>
