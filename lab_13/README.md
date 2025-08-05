@@ -84,11 +84,31 @@ interface Tunnel1
 !
 ```
 
+### Проверка работы GRE туннелей
+
+#### tun0 R14
+
+!["tun0 R14"](./img/tun0_r14.png)
+
+#### tun1 R15
+
+!["tun1 R15"](./img/tun1_r15.png)
+
+#### tun0 R18
+
+!["tun0 R18"](./img/tun0_r18.png)
+
+#### tun1 R18
+
+!["tun1 R18"](./img/tun1_r18.png)
+
 </details>
 
 <details>
 
 <summary><H3>Настройка DMVMN между Москва и Чокурдах, Лабытнанги</H3></summary>
+
+Маршрутизаторам R14 и R15 в офисе Москва назначим роль **HUB**
 
 ### R14
 
@@ -122,6 +142,8 @@ interface Tunnel10
 !
 ```
 
+Маршрутизаторам R27 и R28 назначим роль **SPOKE** и создадим **nhrp map** на оба **HUB**
+
 ### R27
 
 ```
@@ -137,6 +159,26 @@ interface Tunnel10
  ip nhrp nhs 172.16.100.14
  ip nhrp nhs 172.16.100.15
  tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 100
+!
+```
+
+### R28
+
+```
+!
+interface Tunnel10
+ ip address 172.16.100.28 255.255.255.0
+ no ip redirects
+ ip nhrp map 172.16.100.14 207.231.240.2
+ ip nhrp map 172.16.100.15 128.249.190.2
+ ip nhrp map multicast 207.231.240.2
+ ip nhrp map multicast 128.249.190.2
+ ip nhrp network-id 100
+ ip nhrp nhs 172.16.100.14
+ ip nhrp nhs 172.16.100.15
+ tunnel source Ethernet0/1
  tunnel mode gre multipoint
  tunnel key 100
 !
