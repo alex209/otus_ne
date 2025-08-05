@@ -245,6 +245,92 @@ interface Tunnel10
 
 <summary><H3>Настройка IP связности между офисами</H3></summary>
 
-Для обмена префиксами между офисами будем использовать BGP протокол. В офисе Москва между HUB уже настроена iBGP сессия. Для офисов Лабытнанги и Чокурдах номера AS возьмем из приватного диапазона соответственно 65027 и 65028 и настроим eBGP соседство между HUB и SPOKE.
+Для обмена префиксами между офисами будем использовать BGP протокол. В офисе Москва между HUB уже настроена iBGP сессия. Для офисов Лабытнанги и Чокурдах номера AS возьмем из приватного диапазона соответственно 65027 и 65028 и настроим eBGP соседство между HUB и SPOKE. Такая конфигурация подразумевает использование DMVPN во 2-й фазе spoke-to-spoke.
+
+На HUB (R14 b R15) настроим BGP соседство через peer-group.
+
+#### R14
+
+```
+router bgp 1001
+ bgp router-id 10.100.100.14
+ bgp log-neighbor-changes
+ bgp listen range 172.16.100.0/24 peer-group REM_OFFICE
+ neighbor REM_OFFICE peer-group
+ neighbor REM_OFFICE remote-as 65027 alternate-as 65028
+ neighbor 10.10.90.42 remote-as 1001
+ neighbor 2001:DB8:1415::15 remote-as 1001
+ neighbor 2001:1860:4000:100::1 remote-as 101
+ neighbor 172.16.10.2 remote-as 2042
+ neighbor 207.231.240.1 remote-as 101
+ !
+ address-family ipv4
+  network 10.10.90.40 mask 255.255.255.252
+  network 207.231.240.0 mask 255.255.255.252
+  redistribute ospfv3 1 route-map rm_for_VPN
+  neighbor REM_OFFICE activate
+  neighbor REM_OFFICE route-map rm_REM_OFFICE out
+  neighbor 10.10.90.42 activate
+  no neighbor 2001:DB8:1415::15 activate
+  no neighbor 2001:1860:4000:100::1 activate
+  neighbor 172.16.10.2 activate
+  neighbor 172.16.10.2 route-map rm_REM_OFFICE out
+  neighbor 207.231.240.1 activate
+  neighbor 207.231.240.1 prefix-list pl_RFC_1918 out
+  neighbor 207.231.240.1 filter-list 1 out
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001:DB8:1415::/64
+  network 2001:1860:4000:100::/64
+  neighbor 2001:DB8:1415::15 activate
+  neighbor 2001:1860:4000:100::1 activate
+  neighbor 2001:1860:4000:100::1 filter-list 1 out
+ exit-address-family
+!
+```
+
+#### R15
+
+```
+router bgp 1001
+ bgp router-id 10.100.100.15
+ bgp log-neighbor-changes
+ bgp listen range 172.16.100.0/24 peer-group REM_OFFICE
+ neighbor REM_OFFICE peer-group
+ neighbor REM_OFFICE remote-as 65027 alternate-as 65028
+ neighbor 10.10.90.41 remote-as 1001
+ neighbor 2001:468:1A08:1001::1 remote-as 301
+ neighbor 2001:DB8:1415::14 remote-as 1001
+ neighbor 128.249.190.1 remote-as 301
+ neighbor 172.16.10.6 remote-as 2042
+ !
+ address-family ipv4
+  network 10.10.90.40 mask 255.255.255.252
+  network 128.249.190.0 mask 255.255.255.248
+  redistribute ospfv3 1 route-map rm_for_VPN
+  neighbor REM_OFFICE activate
+  neighbor REM_OFFICE route-map rm_REM_OFFICE out
+  neighbor 10.10.90.41 activate
+  no neighbor 2001:468:1A08:1001::1 activate
+  no neighbor 2001:DB8:1415::14 activate
+  neighbor 128.249.190.1 activate
+  neighbor 128.249.190.1 prefix-list pl_RFC_1918 out
+  neighbor 128.249.190.1 route-map rm_ALL_OFFICE in
+  neighbor 128.249.190.1 filter-list 1 out
+  neighbor 172.16.10.6 activate
+  neighbor 172.16.10.6 route-map rm_REM_OFFICE out
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001:468:1A08:1001::/64
+  network 2001:DB8:1415::/64
+  neighbor 2001:468:1A08:1001::1 activate
+  neighbor 2001:468:1A08:1001::1 route-map rm_ALL_OFFICE_v6 in
+  neighbor 2001:468:1A08:1001::1 filter-list 1 out
+  neighbor 2001:DB8:1415::14 activate
+ exit-address-family
+!
+```
 
 </details>
