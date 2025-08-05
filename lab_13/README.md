@@ -112,7 +112,7 @@ interface Tunnel1
 
 <summary><H3>Настройка DMVMN между Москва и Чокурдах, Лабытнанги</H3></summary>
 
-## Таблица адресов для GRE между офисами Москва и С.-Петербург
+## Таблица адресов для mGRE
 
 | Device | Interface | IP Address    | Subnet Mask   | Default Gateway |
 | ------ | --------- | ------------- | ------------- | --------------- |
@@ -196,5 +196,23 @@ interface Tunnel10
  tunnel key 100
 !
 ```
+
+### Проверка работы mGRE туннелей
+
+#### nhrp R14
+
+!["nhrp R14"](./img/nhrp_r14.png)
+
+#### nhrp R15
+
+!["nhrp R15"](./img/nhrp_r15.png)
+
+#### nhrp R27
+
+!["nhrp R27"](./img/nhrp_r27.png)
+
+#### nhrp R28
+
+!["nhrp R28"](./img/nhrp_r28.png)
 
 </details>
