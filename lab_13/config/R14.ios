@@ -1,0 +1,267 @@
+!
+! Last configuration change at 19:45:00 MSK Mon Aug 4 2025
+! NVRAM config last updated at 19:45:01 MSK Mon Aug 4 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R14
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Zcsy$0E4wkZzVrTIpLH5.Us.Xa1
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R14
+ ip address 10.100.100.14 255.255.255.255
+ ipv6 address 2001:DB8::1001:14/128
+ ipv6 enable
+ ospfv3 1 ipv4 area 0
+ ospfv3 1 ipv6 area 0
+!
+interface Tunnel0
+ description to_SPB_R18_e0/2
+ ip address 172.16.10.1 255.255.255.252
+ tunnel source Ethernet0/2
+ tunnel destination 67.73.193.2
+ tunnel key 1
+!
+interface Tunnel10
+ description DMVPN
+ ip address 172.16.100.14 255.255.255.0
+ no ip redirects
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 100
+ tunnel source Ethernet0/2
+ tunnel mode gre multipoint
+ tunnel key 100
+!
+interface Ethernet0/0
+ description to_R12
+ ip address 10.10.90.2 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::14 link-local
+ ipv6 address 2001:DB8:1214::14/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/1
+ description to_R13
+ ip address 10.10.90.9 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::14 link-local
+ ipv6 address 2001:DB8:1314::14/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/2
+ description to_R22_AS101
+ ip address 207.231.240.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address 2001:1860:4000:100::2/64
+ ipv6 enable
+!
+interface Ethernet0/3
+ description to_R19
+ ip address 10.10.90.34 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::14 link-local
+ ipv6 address 2001:DB8:1419::14/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 101
+ ospfv3 1 ipv6 area 101
+!
+interface Ethernet1/0
+ description to_R15
+ ip address 10.10.90.41 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::14 link-local
+ ipv6 address 2001:DB8:1415::14/64
+ ipv6 enable
+ ospfv3 1 cost 60
+ ospfv3 1 ipv4 area 0
+ ospfv3 1 ipv6 area 0
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+router ospfv3 1
+ router-id 10.100.100.14
+ area 101 stub no-summary
+ area 10 stub
+ !
+ address-family ipv4 unicast
+  passive-interface Loopback0
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  passive-interface Loopback0
+ exit-address-family
+!
+router bgp 1001
+ bgp router-id 10.100.100.14
+ bgp log-neighbor-changes
+ bgp listen range 172.16.100.0/24 peer-group REM_OFFICE
+ neighbor REM_OFFICE peer-group
+ neighbor REM_OFFICE remote-as 65027 alternate-as 65028
+ neighbor 10.10.90.42 remote-as 1001
+ neighbor 2001:DB8:1415::15 remote-as 1001
+ neighbor 2001:1860:4000:100::1 remote-as 101
+ neighbor 172.16.10.2 remote-as 2042
+ neighbor 207.231.240.1 remote-as 101
+ !
+ address-family ipv4
+  network 10.10.90.40 mask 255.255.255.252
+  network 207.231.240.0 mask 255.255.255.252
+  redistribute ospfv3 1 route-map rm_for_VPN
+  neighbor REM_OFFICE activate
+  neighbor REM_OFFICE route-map rm_REM_OFFICE out
+  neighbor 10.10.90.42 activate
+  no neighbor 2001:DB8:1415::15 activate
+  no neighbor 2001:1860:4000:100::1 activate
+  neighbor 172.16.10.2 activate
+  neighbor 172.16.10.2 prefix-list for_VPN out
+  neighbor 207.231.240.1 activate
+  neighbor 207.231.240.1 prefix-list pl_RFC_1918 out
+  neighbor 207.231.240.1 filter-list 1 out
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001:DB8:1415::/64
+  network 2001:1860:4000:100::/64
+  neighbor 2001:DB8:1415::15 activate
+  neighbor 2001:1860:4000:100::1 activate
+  neighbor 2001:1860:4000:100::1 filter-list 1 out
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip as-path access-list 1 permit ^$
+!
+no ip http server
+no ip http secure-server
+ip nat inside source list 101 interface Ethernet0/2 overload
+ip nat inside source static tcp 10.100.100.19 22 207.231.240.2 22 extendable
+!
+!
+ip prefix-list for_VPN seq 10 permit 192.168.10.0/24
+ip prefix-list for_VPN seq 20 permit 192.168.20.0/24
+ip prefix-list for_VPN seq 30 permit 10.100.100.0/24 le 32
+!
+ip prefix-list pl_REM_OFFICE seq 5 permit 192.168.12.0/24
+ip prefix-list pl_REM_OFFICE seq 20 permit 192.168.22.0/24
+ip prefix-list pl_REM_OFFICE seq 30 permit 10.200.200.0/24 le 32
+!
+ip prefix-list pl_RFC_1918 seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list pl_RFC_1918 seq 20 deny 172.16.0.0/12 le 32
+ip prefix-list pl_RFC_1918 seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list pl_RFC_1918 seq 40 permit 0.0.0.0/0 le 32
+!
+route-map rm_for_VPN permit 10
+ match ip address prefix-list for_VPN
+!
+route-map rm_REM_OFFICE permit 10
+ match ip address prefix-list pl_REM_OFFICE for_VPN
+!
+!
+access-list 101 permit ip 192.168.10.0 0.0.0.255 any
+access-list 101 permit ip 192.168.20.0 0.0.0.255 any
+access-list 101 permit ip 10.100.100.0 0.0.0.255 any
+access-list 101 permit ip 10.10.90.0 0.0.0.255 any
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 13061E010803
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 0822455D0A16
+ login
+ transport input none
+!
+ntp update-calendar
+ntp server 10.100.100.12
+ntp server 10.100.100.13
+!
+end

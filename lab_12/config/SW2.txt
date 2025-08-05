@@ -1,0 +1,108 @@
+!
+! Last configuration change at 12:03:29 MSK Fri Aug 1 2025
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname SW2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$FelD$gbR1bbfE4CTdmxL5lXIby/
+!
+no aaa new-model
+clock timezone MSK 3 0
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/2
+ switchport access vlan 20
+ switchport mode access
+!
+interface Ethernet0/3
+!
+interface Ethernet1/0
+!
+interface Ethernet1/1
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Vlan100
+ description MGMT
+ ip address 10.100.100.202 255.255.255.192
+ ipv6 enable
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 10.100.100.193
+!
+!
+!
+!
+!
+control-plane
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 070C285F4D06
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 110A1016141D
+ login
+!
+ntp update-calendar
+ntp server 10.100.100.12
+ntp server 10.100.100.13
+!
+end
