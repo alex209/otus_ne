@@ -333,4 +333,33 @@ router bgp 1001
 !
 ```
 
+Настраиваем BGP протокол на SPOKE и анонсируем необходимые локальные сети
+
+#### R27
+
+```
+!
+router bgp 65027
+ bgp log-neighbor-changes
+ network 10.200.200.27 mask 255.255.255.255
+ neighbor 172.16.100.14 remote-as 1001
+ neighbor 172.16.100.15 remote-as 1001
+!
+```
+
+#### R28
+
+```
+!
+router bgp 65028
+ bgp log-neighbor-changes
+ network 10.200.200.28 mask 255.255.255.255
+ network 10.200.200.192 mask 255.255.255.192
+ network 192.168.12.0
+ network 192.168.22.0
+ neighbor 172.16.100.14 remote-as 1001
+ neighbor 172.16.100.15 remote-as 1001
+!
+```
+
 </details>
