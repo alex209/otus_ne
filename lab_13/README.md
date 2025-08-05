@@ -199,17 +199,33 @@ interface Tunnel10
 
 ### Проверка работы mGRE туннелей
 
+#### dmvpn R14
+
+!["dmvpn R14"](./img/dmvpn_r14.png)
+
 #### nhrp R14
 
 !["nhrp R14"](./img/nhrp_r14.png)
+
+#### dmvpn R15
+
+!["dmvpn R15"](./img/dmvpn_r15.png)
 
 #### nhrp R15
 
 !["nhrp R15"](./img/nhrp_r15.png)
 
+#### dmvpn R27
+
+!["dmvpn R27"](./img/dmvpn_r27.png)
+
 #### nhrp R27
 
 !["nhrp R27"](./img/nhrp_r27.png)
+
+#### dmvpn R28
+
+!["dmvpn R28"](./img/dmvpn_r28.png)
 
 #### nhrp R28
 
