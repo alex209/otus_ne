@@ -1,6 +1,5 @@
 !
-! Last configuration change at 19:43:40 MSK Mon Aug 4 2025
-! NVRAM config last updated at 19:43:42 MSK Mon Aug 4 2025
+! No configuration change since last restart
 !
 version 15.4
 service timestamps debug datetime msec
@@ -71,8 +70,8 @@ interface Loopback0
  ip address 10.100.100.15 255.255.255.255
  ipv6 address 2001:DB8::1001:15/128
  ipv6 enable
- ospfv3 1 ipv6 area 0
  ospfv3 1 ipv4 area 0
+ ospfv3 1 ipv6 area 0
 !
 interface Tunnel1
  description to_SPB_R18_e0/3
@@ -99,8 +98,8 @@ interface Ethernet0/0
  ipv6 address FE80::15 link-local
  ipv6 address 2001:DB8:1315::15/64
  ipv6 enable
- ospfv3 1 ipv6 area 10
  ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
 !
 interface Ethernet0/1
  description to_R12
@@ -110,8 +109,8 @@ interface Ethernet0/1
  ipv6 address FE80::15 link-local
  ipv6 address 2001:DB8:1215::15/64
  ipv6 enable
- ospfv3 1 ipv6 area 10
  ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
 !
 interface Ethernet0/2
  description to_R21_AS301
@@ -129,8 +128,8 @@ interface Ethernet0/3
  ipv6 address FE80::15 link-local
  ipv6 address 2001:DB8:1520::15/64
  ipv6 enable
- ospfv3 1 ipv6 area 102
  ospfv3 1 ipv4 area 102
+ ospfv3 1 ipv6 area 102
 !
 interface Ethernet1/0
  description to_R14
@@ -190,7 +189,7 @@ router bgp 1001
   network 128.249.190.0 mask 255.255.255.248
   redistribute ospfv3 1 route-map rm_for_VPN
   neighbor REM_OFFICE activate
-  neighbor REM_OFFICE prefix-list for_VPN out
+  neighbor REM_OFFICE route-map rm_REM_OFFICE out
   neighbor 10.10.90.41 activate
   no neighbor 2001:468:1A08:1001::1 activate
   no neighbor 2001:DB8:1415::14 activate
@@ -199,7 +198,7 @@ router bgp 1001
   neighbor 128.249.190.1 route-map rm_ALL_OFFICE in
   neighbor 128.249.190.1 filter-list 1 out
   neighbor 172.16.10.6 activate
-  neighbor 172.16.10.6 prefix-list for_VPN out
+  neighbor 172.16.10.6 route-map rm_REM_OFFICE out
  exit-address-family
  !
  address-family ipv6
@@ -235,10 +234,18 @@ ip prefix-list for_VPN seq 10 permit 192.168.10.0/24
 ip prefix-list for_VPN seq 20 permit 192.168.20.0/24
 ip prefix-list for_VPN seq 30 permit 10.100.100.0/24 le 32
 !
+ip prefix-list pl_REM_OFFICE seq 5 permit 192.168.12.0/24
+ip prefix-list pl_REM_OFFICE seq 20 permit 192.168.22.0/24
+ip prefix-list pl_REM_OFFICE seq 30 permit 10.200.200.0/24 le 32
+!
 ip prefix-list pl_RFC_1918 seq 10 deny 10.0.0.0/8 le 32
 ip prefix-list pl_RFC_1918 seq 20 deny 172.16.0.0/12 le 32
 ip prefix-list pl_RFC_1918 seq 30 deny 192.168.0.0/16 le 32
 ip prefix-list pl_RFC_1918 seq 40 permit 0.0.0.0/0 le 32
+!
+ip prefix-list pl_SBP seq 10 permit 192.168.11.0/24
+ip prefix-list pl_SBP seq 20 permit 192.168.21.0/24
+ip prefix-list pl_SBP seq 30 permit 10.200.100.0/24 le 32
 !
 !
 ipv6 prefix-list ALL_OFFICE_v6 seq 10 permit 2C0F:F400:10FF:1::/64
@@ -258,6 +265,9 @@ route-map rm_ALL_OFFICE_v6 permit 10
  set local-preference 300
 !
 route-map rm_ALL_OFFICE_v6 permit 20
+!
+route-map rm_REM_OFFICE permit 10
+ match ip address prefix-list pl_REM_OFFICE for_VPN pl_SBP
 !
 route-map rm_ALL_OFFICE permit 10
  match ip address prefix-list ALL_OFFICE

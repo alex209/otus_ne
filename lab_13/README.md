@@ -85,3 +85,61 @@ interface Tunnel1
 ```
 
 </details>
+
+<details>
+
+<summary><H3>Настройка DMVMN между Москва и Чокурдах, Лабытнанги</H3></summary>
+
+### R14
+
+```
+!
+interface Tunnel10
+ description DMVPN
+ ip address 172.16.100.14 255.255.255.0
+ no ip redirects
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 100
+ tunnel source Ethernet0/2
+ tunnel mode gre multipoint
+ tunnel key 100
+!
+```
+
+### R15
+
+```
+!
+interface Tunnel10
+ description DMVPN
+ ip address 172.16.100.15 255.255.255.0
+ no ip redirects
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 100
+ tunnel source Ethernet0/2
+ tunnel mode gre multipoint
+ tunnel key 100
+!
+```
+
+### R27
+
+```
+!
+interface Tunnel10
+ ip address 172.16.100.27 255.255.255.0
+ no ip redirects
+ ip nhrp map 172.16.100.14 207.231.240.2
+ ip nhrp map multicast 207.231.240.2
+ ip nhrp map 172.16.100.15 128.249.190.2
+ ip nhrp map multicast 128.249.190.2
+ ip nhrp network-id 100
+ ip nhrp nhs 172.16.100.14
+ ip nhrp nhs 172.16.100.15
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 100
+!
+```
+
+</details>
