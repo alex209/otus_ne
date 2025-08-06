@@ -460,9 +460,17 @@ route-map rm_REM_OFFICE permit 10
 
 !["пинги от VPC1"](./img/ping_vpc1_msk.png)
 
+#### трассировка от VPC1 до рабочих станций в других офисах
+
+!["trace VPC1"](./img/trace_VPC1.png)
+
 #### пинги от VPC7 до рабочих станций в других офисах
 
 !["пинги от VPC7"](./img/ping_vpc7_msk.png)
+
+#### трассировка от VPC7 до рабочих станций в других офисах
+
+!["trace VPC7"](./img/trace_VPC7.png)
 
 ## С.-Петербург
 
