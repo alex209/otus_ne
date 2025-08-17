@@ -185,6 +185,24 @@ interface Tunnel1
 
 ```
 
-#### Проверка
+### Проверка работы GRE over IPsec
+
+#### Состояние туннелей GRE
+
+##### R14 tun 0
+
+!["R14 tun 0"](./img/r14_int_tun0.png)
+
+##### R15 tun 1
+
+!["R15 tun 1"](./img/r15_int_tun1.png)
+
+##### R18 tun 0
+
+!["R18 tun 0"](./img/r18_int_tun0.png)
+
+##### R18 tun 1
+
+!["R18 tun 1"](./img/r18_int_tun1.png)
 
 </details>
