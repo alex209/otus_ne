@@ -53,4 +53,25 @@ crypto key generate rsa general-keys label R20CA modulus 2048 exportable
 
 !["Key pair"](./img/r20_key_pair.png)
 
+#### Настройка CA-сервера на маршрутизаторе
+
+```
+!
+crypto pki server R20CA
+ database level complete
+ no database archive
+ issuer-name CN=R20CA, O=Otus, C=RU
+ lifetime crl 24
+!
+crypto pki trustpoint R20CA
+ revocation-check crl
+ rsakeypair R20CA
+!
+
+```
+
+##### R20CA Server
+
+!["R20CA Server"](./img/r20_CA_server.png)
+
 </details>
