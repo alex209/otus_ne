@@ -1,0 +1,181 @@
+!
+! Last configuration change at 10:30:11 MSK Sun Aug 17 2025
+! NVRAM config last updated at 11:12:59 MSK Sun Aug 17 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R20CA
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$gORq$vx8aYB9zQZBBRMO1xKAJG0
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name otus.ru
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+crypto pki server R20CA
+ database level complete
+ no database archive
+ issuer-name CN=R20CA, O=Otus, C=RU
+ lifetime crl 24
+!
+crypto pki trustpoint R20CA
+ revocation-check crl
+ rsakeypair R20CA
+!
+!
+crypto pki certificate chain R20CA
+ certificate ca 01
+  30820336 3082021E A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  2C310B30 09060355 04061302 5255310D 300B0603 55040A13 044F7475 73310E30
+  0C060355 04031305 52323043 41301E17 0D323530 38313631 34323235 365A170D
+  32383038 31353134 32323536 5A302C31 0B300906 03550406 13025255 310D300B
+  06035504 0A13044F 74757331 0E300C06 03550403 13055232 30434130 82012230
+  0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 82010100 D7EC9C47
+  B4CDE012 1F9ED2F7 4894F820 C2A315BD EEBD8AD7 08EFCDBF FBC4A4AF 3AB9459F
+  3693EE25 66FDB71E 1AF8E147 919B9D80 B4AA048C 8A0A7271 F781D31E 74518E2F
+  7B186864 D730F9D4 88DDBF0B BC55C0E4 44DBDD26 9A29FC29 EE29FA33 8AA042E5
+  0F6228E9 CECB25D5 53BB1DF6 4C58FBEC 79610ABA 3EC962F7 70DFB9E8 6832781E
+  E1B292F3 E37030E8 11100564 96DA11EA 194E4C4C 5926F1D6 490C947F E4CDC7E4
+  95D054B7 1FE13A1E 1D91F8EF 9CD0250E 947AFB6A 160CE6EB B121DD61 F330753B
+  72FB4CA6 0A7F5057 F4EB6670 6582E2EB 983AABC5 6757F038 7F03F277 8163B8F2
+  D0A08D84 FD25BAF0 00362095 B5630E98 68C9B6D0 AA49568E 00258C41 02030100
+  01A36330 61300F06 03551D13 0101FF04 05300301 01FF300E 0603551D 0F0101FF
+  04040302 0186301F 0603551D 23041830 16801419 D55D9D13 ED99C175 59F48DD7
+  2BD2ADC0 96D93130 1D060355 1D0E0416 041419D5 5D9D13ED 99C17559 F48DD72B
+  D2ADC096 D931300D 06092A86 4886F70D 01010405 00038201 010011B9 09AAF655
+  DEF00E1F 27D9DA1E 7EA7E97E AEAF5796 A7F8FF7A BF40CDAD 3FCA4265 25A1355B
+  12CF8EA3 60DF6613 4B71A967 A4F9B687 44F9DF16 C1A2E0CA 5E0DA0DD 9437286A
+  8693025D 5F05B9B5 2C853E28 116800BB 8EFB4BAA 2892CAC2 37FE2918 2D499EB8
+  62F1D419 B5E92075 068F9936 15099A76 B2192E70 9DA1F51A 1B2AFAEC BE82E10C
+  5F70C6D1 D350173B 6FF97B2E E6279507 89FB369A 9419C77F CAC7697F 8EB514AD
+  0D259B25 1541750A 6D4C11CF CF183B25 F0E69D2C C9365BDE 052D0735 A7C1FDDE
+  444252E6 DCDB5A9A FE178821 04E1FFFC EEC0A010 091E2421 B1635865 6C53438A
+  1E59415D 78CE560F 30D2DA45 3D765477 1F1D3170 9F52DB75 8D5E
+        quit
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R20
+ ip address 10.100.100.20 255.255.255.255
+ ipv6 address 2001:DB8::1001:20/128
+ ipv6 enable
+ ospfv3 1 ipv4 area 102
+ ospfv3 1 ipv6 area 102
+!
+interface Ethernet0/0
+ description to_R15
+ ip address 10.10.90.37 255.255.255.252
+ ipv6 address FE80::20 link-local
+ ipv6 address 2001:DB8:1520::20/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 102
+ ospfv3 1 ipv6 area 102
+!
+interface Ethernet0/1
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router ospfv3 1
+ router-id 10.100.100.20
+ !
+ address-family ipv4 unicast
+  passive-interface Loopback0
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  passive-interface Loopback0
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.10.90.38
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 14141B180F0B
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 14141B180F0B
+ login
+ transport input telnet
+!
+ntp update-calendar
+ntp server 10.100.100.12
+ntp server 10.100.100.13
+!
+end

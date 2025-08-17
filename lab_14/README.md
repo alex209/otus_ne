@@ -45,10 +45,10 @@ ip domain name otus.ru
 ip http server
 ```
 
-#### Генерация ключевой пары
+#### Генерация ключевой пары сервера CA
 
 ```
-crypto key generate rsa general-keys label R20CA modulus 2048 exportable
+(config)# crypto key generate rsa general-keys label R20CA modulus 2048 exportable
 ```
 
 ##### Key pair
@@ -102,6 +102,24 @@ crypto pki trustpoint R20CA
  subject-name CN=Rxx, O=Otus, C=RU
  revocation-check crl
 !
+```
+
+### Генерация ключевой пары на маршрутизаторах R14, R15, R18, R27 и R28 и получение собственных сертификатов
+
+```
+(config)# crypto key generate rsa modulus 2048
+```
+
+#### Получить сертификат CA-сервера
+
+```
+(config)# crypto pki authenticate R20CA
+```
+
+#### Запрос собственного сертификата:
+
+```
+(config)# crypto pki enroll R20CA
 ```
 
 </details>
