@@ -1,0 +1,394 @@
+!
+! Last configuration change at 20:22:16 MSK Sat Aug 16 2025
+! NVRAM config last updated at 11:25:29 MSK Sun Aug 17 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R15
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Q5iJ$urHN0vkghBI81.8bEyroG.
+!
+no aaa new-model
+clock timezone MSK 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip domain name otus.ru
+ip host R20CA 10.100.100.20
+ip host r20ca.otus.ru 10.100.100.20
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint R20CA
+ enrollment url http://r20ca.otus.ru:80
+ serial-number
+ subject-name CN=R15, O=Otus, C=RU
+ revocation-check crl
+!
+!
+crypto pki certificate chain R20CA
+ certificate 03
+  3082034D 30820235 A0030201 02020103 300D0609 2A864886 F70D0101 05050030
+  2C310B30 09060355 04061302 5255310D 300B0603 55040A13 044F7475 73310E30
+  0C060355 04031305 52323043 41301E17 0D323530 38313631 34343035 385A170D
+  32363038 31363134 34303538 5A305731 0B300906 03550406 13025255 310D300B
+  06035504 0A13044F 74757331 0C300A06 03550403 13035231 35312B30 0F060355
+  04051308 36393233 36373531 30180609 2A864886 F70D0109 02160B52 31352E6F
+  7475732E 72753082 0122300D 06092A86 4886F70D 01010105 00038201 0F003082
+  010A0282 010100B5 9E322A33 E2DE5531 7DCCACBF AB0281B6 46CDECC4 9795381B
+  880AAE6D 71E4C286 32DE405D A19055DC A49AC95F F87AFE5F 994706F5 4D6C3478
+  0ACB8169 2684BBB1 F49B2931 C9BA0DE5 ECA3F1B7 5805C77B DF3E65F2 4C35DA07
+  47358D92 EEB28687 4A8EA011 D5D5AC9F 2B27284B 1934D259 B2B02DA8 1079781F
+  110CAD79 71D29758 71E93518 EA91D822 33D28193 66DF745F 8A327B11 60648A20
+  DB895141 C38FB491 5CCAC0B0 D4842BCE C198934A 84AB0884 F8F06A9E 1E133087
+  D70312A8 05C99ACA 29FB4903 D6DA007B B1D4E06B B810BCD0 1B689EA7 F2EE76EA
+  B365EFC2 48098ACA CB5B20F2 7233CF34 8C63C281 D65B1E60 31020C9D BA1EB108
+  DA88ACE4 0733BF02 03010001 A34F304D 300B0603 551D0F04 04030205 A0301F06
+  03551D23 04183016 801419D5 5D9D13ED 99C17559 F48DD72B D2ADC096 D931301D
+  0603551D 0E041604 149F9CDB BE9539A9 4DA6313F 4BDA2F16 2BF67B4D AD300D06
+  092A8648 86F70D01 01050500 03820101 00C2F82A F3374BD0 5F96761D D9C82686
+  A77DD9A8 33984F61 BB13599C F226B393 C3E55A5D AD7FF97B CCDDB929 974E1497
+  BFF3BD98 C1FD2154 0C9AE3D8 F868A088 55FC72A4 54596F38 AFA19F2D 3EECF85F
+  34922CC7 45FDF227 EF6598AE 1055FEDC 9F85AAFC 0D425C11 19408131 A6F5AD9B
+  604A37A8 9C6FEA28 350CF023 6A357CDD A1AF0B91 5CB88714 5470F5AC E083013A
+  FC149893 E5295896 4402136B 28E0A7DA A42F4E69 9ACA274A 2724E3A9 7CE9F560
+  A3DC4784 D586CD6C 8E1B4321 8E95FA4D 488359A7 17FE7ADB 6DA1B770 5D061991
+  9D673F41 F967D308 06096CE9 9355C1AC 7593B09E 1661B56E 38B8FF94 806A6445
+  CD5C6DAC ECEB8389 040ADAF3 F665C7F7 D0
+        quit
+ certificate ca 01
+  30820336 3082021E A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  2C310B30 09060355 04061302 5255310D 300B0603 55040A13 044F7475 73310E30
+  0C060355 04031305 52323043 41301E17 0D323530 38313631 34323235 365A170D
+  32383038 31353134 32323536 5A302C31 0B300906 03550406 13025255 310D300B
+  06035504 0A13044F 74757331 0E300C06 03550403 13055232 30434130 82012230
+  0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 82010100 D7EC9C47
+  B4CDE012 1F9ED2F7 4894F820 C2A315BD EEBD8AD7 08EFCDBF FBC4A4AF 3AB9459F
+  3693EE25 66FDB71E 1AF8E147 919B9D80 B4AA048C 8A0A7271 F781D31E 74518E2F
+  7B186864 D730F9D4 88DDBF0B BC55C0E4 44DBDD26 9A29FC29 EE29FA33 8AA042E5
+  0F6228E9 CECB25D5 53BB1DF6 4C58FBEC 79610ABA 3EC962F7 70DFB9E8 6832781E
+  E1B292F3 E37030E8 11100564 96DA11EA 194E4C4C 5926F1D6 490C947F E4CDC7E4
+  95D054B7 1FE13A1E 1D91F8EF 9CD0250E 947AFB6A 160CE6EB B121DD61 F330753B
+  72FB4CA6 0A7F5057 F4EB6670 6582E2EB 983AABC5 6757F038 7F03F277 8163B8F2
+  D0A08D84 FD25BAF0 00362095 B5630E98 68C9B6D0 AA49568E 00258C41 02030100
+  01A36330 61300F06 03551D13 0101FF04 05300301 01FF300E 0603551D 0F0101FF
+  04040302 0186301F 0603551D 23041830 16801419 D55D9D13 ED99C175 59F48DD7
+  2BD2ADC0 96D93130 1D060355 1D0E0416 041419D5 5D9D13ED 99C17559 F48DD72B
+  D2ADC096 D931300D 06092A86 4886F70D 01010405 00038201 010011B9 09AAF655
+  DEF00E1F 27D9DA1E 7EA7E97E AEAF5796 A7F8FF7A BF40CDAD 3FCA4265 25A1355B
+  12CF8EA3 60DF6613 4B71A967 A4F9B687 44F9DF16 C1A2E0CA 5E0DA0DD 9437286A
+  8693025D 5F05B9B5 2C853E28 116800BB 8EFB4BAA 2892CAC2 37FE2918 2D499EB8
+  62F1D419 B5E92075 068F9936 15099A76 B2192E70 9DA1F51A 1B2AFAEC BE82E10C
+  5F70C6D1 D350173B 6FF97B2E E6279507 89FB369A 9419C77F CAC7697F 8EB514AD
+  0D259B25 1541750A 6D4C11CF CF183B25 F0E69D2C C9365BDE 052D0735 A7C1FDDE
+  444252E6 DCDB5A9A FE178821 04E1FFFC EEC0A010 091E2421 B1635865 6C53438A
+  1E59415D 78CE560F 30D2DA45 3D765477 1F1D3170 9F52DB75 8D5E
+        quit
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes 256
+ hash sha256
+ group 16
+ lifetime 3600
+!
+!
+crypto ipsec transform-set ts_GRE esp-aes esp-sha-hmac
+ mode transport
+crypto ipsec transform-set ts_DMVPN esp-aes 256 esp-sha256-hmac
+ mode transport
+!
+!
+crypto ipsec profile pof_DMVPN
+ set transform-set ts_DMVPN
+!
+crypto ipsec profile pof_GRE
+ set transform-set ts_GRE
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R15
+ ip address 10.100.100.15 255.255.255.255
+ ipv6 address 2001:DB8::1001:15/128
+ ipv6 enable
+ ospfv3 1 ipv4 area 0
+ ospfv3 1 ipv6 area 0
+!
+interface Tunnel1
+ description to_SPB_R18_e0/3
+ ip address 172.16.10.5 255.255.255.252
+ tunnel source Ethernet0/2
+ tunnel destination 64.210.65.2
+ tunnel key 2
+ tunnel protection ipsec profile pof_GRE
+!
+interface Tunnel10
+ description DMVPN
+ ip address 172.16.100.15 255.255.255.0
+ no ip redirects
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 100
+ tunnel source Ethernet0/2
+ tunnel mode gre multipoint
+ tunnel key 100
+ tunnel protection ipsec profile pof_DMVPN
+!
+interface Ethernet0/0
+ description to_R13
+ ip address 10.10.90.6 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1315::15/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/1
+ description to_R12
+ ip address 10.10.90.14 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1215::15/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 10
+ ospfv3 1 ipv6 area 10
+!
+interface Ethernet0/2
+ description to_R21_AS301
+ ip address 128.249.190.2 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address 2001:468:1A08:1001::2/64
+ ipv6 enable
+!
+interface Ethernet0/3
+ description to_R20
+ ip address 10.10.90.38 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1520::15/64
+ ipv6 enable
+ ospfv3 1 ipv4 area 102
+ ospfv3 1 ipv6 area 102
+!
+interface Ethernet1/0
+ description to_R14
+ ip address 10.10.90.42 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FE80::15 link-local
+ ipv6 address 2001:DB8:1415::15/64
+ ipv6 enable
+ ospfv3 1 cost 60
+ ospfv3 1 ipv4 area 0
+ ospfv3 1 ipv6 area 0
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+!
+router eigrp VPN
+!
+router ospfv3 1
+ router-id 10.100.100.15
+ area 10 stub
+ !
+ address-family ipv4 unicast
+  passive-interface Loopback0
+  area 102 filter-list prefix AREA_101 in
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  passive-interface Loopback0
+  area 102 filter-list prefix AREA_101_v6 in
+ exit-address-family
+!
+router bgp 1001
+ bgp router-id 10.100.100.15
+ bgp log-neighbor-changes
+ bgp listen range 172.16.100.0/24 peer-group REM_OFFICE
+ neighbor REM_OFFICE peer-group
+ neighbor REM_OFFICE remote-as 65027 alternate-as 65028
+ neighbor 10.10.90.41 remote-as 1001
+ neighbor 2001:468:1A08:1001::1 remote-as 301
+ neighbor 2001:DB8:1415::14 remote-as 1001
+ neighbor 128.249.190.1 remote-as 301
+ neighbor 172.16.10.6 remote-as 2042
+ !
+ address-family ipv4
+  network 10.10.90.40 mask 255.255.255.252
+  network 128.249.190.0 mask 255.255.255.248
+  redistribute ospfv3 1 route-map rm_for_VPN
+  neighbor REM_OFFICE activate
+  neighbor REM_OFFICE route-map rm_REM_OFFICE out
+  neighbor 10.10.90.41 activate
+  no neighbor 2001:468:1A08:1001::1 activate
+  no neighbor 2001:DB8:1415::14 activate
+  neighbor 128.249.190.1 activate
+  neighbor 128.249.190.1 prefix-list pl_RFC_1918 out
+  neighbor 128.249.190.1 route-map rm_ALL_OFFICE in
+  neighbor 128.249.190.1 filter-list 1 out
+  neighbor 172.16.10.6 activate
+  neighbor 172.16.10.6 route-map rm_REM_OFFICE out
+ exit-address-family
+ !
+ address-family ipv6
+  network 2001:468:1A08:1001::/64
+  network 2001:DB8:1415::/64
+  neighbor 2001:468:1A08:1001::1 activate
+  neighbor 2001:468:1A08:1001::1 route-map rm_ALL_OFFICE_v6 in
+  neighbor 2001:468:1A08:1001::1 filter-list 1 out
+  neighbor 2001:DB8:1415::14 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip as-path access-list 1 permit ^$
+!
+no ip http server
+no ip http secure-server
+ip nat inside source list 101 interface Ethernet0/2 overload
+ip nat inside source static 10.100.100.20 128.249.190.3
+!
+!
+ip prefix-list ALL_OFFICE seq 10 permit 67.73.193.0/30
+ip prefix-list ALL_OFFICE seq 20 permit 64.210.65.0/30
+ip prefix-list ALL_OFFICE seq 30 permit 67.73.196.0/30
+ip prefix-list ALL_OFFICE seq 40 permit 8.242.244.0/30
+ip prefix-list ALL_OFFICE seq 50 permit 67.73.196.4/30
+!
+ip prefix-list AREA_101 seq 10 deny 10.100.100.19/32
+ip prefix-list AREA_101 seq 20 deny 10.10.90.32/30
+ip prefix-list AREA_101 seq 30 permit 0.0.0.0/0 le 32
+!
+ip prefix-list for_VPN seq 10 permit 192.168.10.0/24
+ip prefix-list for_VPN seq 20 permit 192.168.20.0/24
+ip prefix-list for_VPN seq 30 permit 10.100.100.0/24 le 32
+!
+ip prefix-list pl_REM_OFFICE seq 5 permit 192.168.12.0/24
+ip prefix-list pl_REM_OFFICE seq 20 permit 192.168.22.0/24
+ip prefix-list pl_REM_OFFICE seq 30 permit 10.200.200.0/24 le 32
+!
+ip prefix-list pl_RFC_1918 seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list pl_RFC_1918 seq 20 deny 172.16.0.0/12 le 32
+ip prefix-list pl_RFC_1918 seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list pl_RFC_1918 seq 40 permit 0.0.0.0/0 le 32
+!
+ip prefix-list pl_SBP seq 10 permit 192.168.11.0/24
+ip prefix-list pl_SBP seq 20 permit 192.168.21.0/24
+ip prefix-list pl_SBP seq 30 permit 10.200.100.0/24 le 32
+!
+!
+ipv6 prefix-list ALL_OFFICE_v6 seq 10 permit 2C0F:F400:10FF:1::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 20 permit 2C0F:F400:10FF:2::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 30 permit 2001:678:ADC:2528::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 40 permit 2001:67C:94C:2628::/64
+ipv6 prefix-list ALL_OFFICE_v6 seq 50 permit 2001:678:5B0:2527::/64
+!
+ipv6 prefix-list AREA_101_v6 seq 10 deny 2001:DB8::1001:20/128
+ipv6 prefix-list AREA_101_v6 seq 20 deny 2001:DB8:1419::/64
+ipv6 prefix-list AREA_101_v6 seq 30 permit ::/0 le 128
+route-map rm_for_VPN permit 10
+ match ip address prefix-list for_VPN
+!
+route-map rm_ALL_OFFICE_v6 permit 10
+ match ipv6 address prefix-list ALL_OFFICE_v6
+ set local-preference 300
+!
+route-map rm_ALL_OFFICE_v6 permit 20
+!
+route-map rm_REM_OFFICE permit 10
+ match ip address prefix-list pl_REM_OFFICE for_VPN pl_SBP
+!
+route-map rm_ALL_OFFICE permit 10
+ match ip address prefix-list ALL_OFFICE
+ set local-preference 300
+!
+route-map rm_ALL_OFFICE permit 20
+!
+!
+access-list 101 permit ip 192.168.10.0 0.0.0.255 any
+access-list 101 permit ip 192.168.20.0 0.0.0.255 any
+access-list 101 permit ip 10.100.100.0 0.0.0.255 any
+access-list 101 permit ip 10.10.90.0 0.0.0.255 any
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 104D000A0618
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 121A0C041104
+ login
+ transport input none
+!
+ntp update-calendar
+ntp server 10.100.100.12
+ntp server 10.100.100.13
+!
+end

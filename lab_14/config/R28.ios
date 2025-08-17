@@ -1,0 +1,344 @@
+!
+! Last configuration change at 17:20:07 UTC Sat Aug 16 2025
+! NVRAM config last updated at 08:29:51 UTC Sun Aug 17 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R28
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$qJ5C$FKGMTYezpTmiimNZOC6l//
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip domain name otus.ru
+ip host R20CA 128.249.190.3
+ip host r20ca.otus.ru 128.249.190.3
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint R20CA
+ enrollment url http://r20ca.otus.ru:80
+ serial-number
+ subject-name CN=R28, O=Otus, C=RU
+ revocation-check crl
+!
+!
+crypto pki certificate chain R20CA
+ certificate 05
+  3082034D 30820235 A0030201 02020105 300D0609 2A864886 F70D0101 05050030
+  2C310B30 09060355 04061302 5255310D 300B0603 55040A13 044F7475 73310E30
+  0C060355 04031305 52323043 41301E17 0D323530 38313631 36333231 335A170D
+  32363038 31363136 33323133 5A305731 0B300906 03550406 13025255 310D300B
+  06035504 0A13044F 74757331 0C300A06 03550403 13035232 38312B30 0F060355
+  04051308 36393236 33333838 30180609 2A864886 F70D0109 02160B52 32382E6F
+  7475732E 72753082 0122300D 06092A86 4886F70D 01010105 00038201 0F003082
+  010A0282 010100C7 B479ADFC 2C4A7FFC EA46173A D69A18F5 A23BC095 C7B17EEA
+  4644A7ED CE97D788 7A78D6E6 8D5D41CB F6F9DCF6 361849DB C43E72F9 7AA9283D
+  0619F220 9EB2A2B3 082FD7FF AF258EB0 F95746FE 7539E901 E9137D57 75737551
+  5D5157B2 D3FEA1E8 B65F4BFE 27E604EC 706242D9 6E2DE68C 4FE83E18 82566076
+  3C9BB6CA 06D1A615 0AAB1B53 C2AFF608 09A1D52C D48FAF5D 858C70C2 2EA6E9CC
+  B7EC4BAE 4820065D 37C250E7 D4C649D9 05DECE30 E19037CE CB610AE5 A0FC8461
+  A97B0631 2D2FC5EA 6E1527F9 6CC60589 FB96A7CC 06A8CA78 0312FDB8 55D7F3A9
+  53DB8232 9D1F8476 6A335624 81BAB4CC 3F37D5AA 7BF0B80A C0D82037 969F7795
+  2F8026A1 1448D702 03010001 A34F304D 300B0603 551D0F04 04030205 A0301F06
+  03551D23 04183016 801419D5 5D9D13ED 99C17559 F48DD72B D2ADC096 D931301D
+  0603551D 0E041604 1487EC1E AD07A366 6FD34D20 525D1212 5FFB451F 32300D06
+  092A8648 86F70D01 01050500 03820101 004D5FF9 177A2E3C 8A260EBC 95DB36EF
+  C73A63F9 011681C2 68EF6A24 CBBE64A7 1B855035 ADEED420 14809C78 63F7AD7D
+  0E35F844 57129C8E 0B066F10 81602780 76EB5C3C 3797573A 269E7694 6DB1118D
+  C63145DF CE557B72 860AD741 6BFE5241 C35CA6DF E72676AC 9C4E4B02 22E1E63D
+  8199B499 BE87731F 35D0D46C 42EF1C22 AF1E05EA E0C54590 D86A24F3 904E8B77
+  616AA1CA E4B2A8DF 84A64587 B4B3D03A 027D27B7 B34FC725 77374A87 5675BED0
+  A195AD93 9443AB60 B4917E98 384B87CE F3E2C54B A9AE270F F91887C0 31F58649
+  8F7F355D 6C8C0B7B 254AFC27 D0379922 272629D8 FE50A982 A1314508 B9BE25E6
+  ECBDC401 F7CCF35D 9C1330C0 68AA0FEF E0
+        quit
+ certificate ca 01
+  30820336 3082021E A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  2C310B30 09060355 04061302 5255310D 300B0603 55040A13 044F7475 73310E30
+  0C060355 04031305 52323043 41301E17 0D323530 38313631 34323235 365A170D
+  32383038 31353134 32323536 5A302C31 0B300906 03550406 13025255 310D300B
+  06035504 0A13044F 74757331 0E300C06 03550403 13055232 30434130 82012230
+  0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 82010100 D7EC9C47
+  B4CDE012 1F9ED2F7 4894F820 C2A315BD EEBD8AD7 08EFCDBF FBC4A4AF 3AB9459F
+  3693EE25 66FDB71E 1AF8E147 919B9D80 B4AA048C 8A0A7271 F781D31E 74518E2F
+  7B186864 D730F9D4 88DDBF0B BC55C0E4 44DBDD26 9A29FC29 EE29FA33 8AA042E5
+  0F6228E9 CECB25D5 53BB1DF6 4C58FBEC 79610ABA 3EC962F7 70DFB9E8 6832781E
+  E1B292F3 E37030E8 11100564 96DA11EA 194E4C4C 5926F1D6 490C947F E4CDC7E4
+  95D054B7 1FE13A1E 1D91F8EF 9CD0250E 947AFB6A 160CE6EB B121DD61 F330753B
+  72FB4CA6 0A7F5057 F4EB6670 6582E2EB 983AABC5 6757F038 7F03F277 8163B8F2
+  D0A08D84 FD25BAF0 00362095 B5630E98 68C9B6D0 AA49568E 00258C41 02030100
+  01A36330 61300F06 03551D13 0101FF04 05300301 01FF300E 0603551D 0F0101FF
+  04040302 0186301F 0603551D 23041830 16801419 D55D9D13 ED99C175 59F48DD7
+  2BD2ADC0 96D93130 1D060355 1D0E0416 041419D5 5D9D13ED 99C17559 F48DD72B
+  D2ADC096 D931300D 06092A86 4886F70D 01010405 00038201 010011B9 09AAF655
+  DEF00E1F 27D9DA1E 7EA7E97E AEAF5796 A7F8FF7A BF40CDAD 3FCA4265 25A1355B
+  12CF8EA3 60DF6613 4B71A967 A4F9B687 44F9DF16 C1A2E0CA 5E0DA0DD 9437286A
+  8693025D 5F05B9B5 2C853E28 116800BB 8EFB4BAA 2892CAC2 37FE2918 2D499EB8
+  62F1D419 B5E92075 068F9936 15099A76 B2192E70 9DA1F51A 1B2AFAEC BE82E10C
+  5F70C6D1 D350173B 6FF97B2E E6279507 89FB369A 9419C77F CAC7697F 8EB514AD
+  0D259B25 1541750A 6D4C11CF CF183B25 F0E69D2C C9365BDE 052D0735 A7C1FDDE
+  444252E6 DCDB5A9A FE178821 04E1FFFC EEC0A010 091E2421 B1635865 6C53438A
+  1E59415D 78CE560F 30D2DA45 3D765477 1F1D3170 9F52DB75 8D5E
+        quit
+object-group network og_LAN
+ 192.168.12.0 255.255.255.0
+ 192.168.22.0 255.255.255.0
+!
+object-group network og_VPN
+ 192.168.10.0 255.255.255.0
+ 192.168.20.0 255.255.255.0
+ 10.100.100.0 255.255.255.0
+ 10.200.200.0 255.255.255.0
+ 192.168.11.0 255.255.255.0
+ 192.168.21.0 255.255.255.0
+ 10.200.100.0 255.255.255.0
+!
+!
+redundancy
+!
+!
+track 1 ip sla 1 reachability
+ delay down 30 up 15
+!
+track 2 ip sla 2 reachability
+ delay down 30 up 15
+!
+!
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes 256
+ hash sha256
+ group 16
+ lifetime 3600
+!
+!
+crypto ipsec transform-set ts_DMVPN esp-aes 256 esp-sha256-hmac
+ mode transport
+!
+!
+crypto ipsec profile pof_DMVPN
+ set transform-set ts_DMVPN
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback_R28
+ ip address 10.200.200.28 255.255.255.255
+!
+interface Tunnel10
+ ip address 172.16.100.28 255.255.255.0
+ no ip redirects
+ ip nhrp map 172.16.100.14 207.231.240.2
+ ip nhrp map 172.16.100.15 128.249.190.2
+ ip nhrp map multicast 207.231.240.2
+ ip nhrp map multicast 128.249.190.2
+ ip nhrp network-id 100
+ ip nhrp nhs 172.16.100.14
+ ip nhrp nhs 172.16.100.15
+ tunnel source Ethernet0/1
+ tunnel mode gre multipoint
+ tunnel key 100
+ tunnel protection ipsec profile pof_DMVPN
+!
+interface Ethernet0/0
+ description to_R26_AS520
+ ip address 8.242.244.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address 2001:67C:94C:2628::2/64
+ ipv6 enable
+!
+interface Ethernet0/1
+ description to_R25_AS520
+ ip address 67.73.196.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+ ipv6 address 2001:678:ADC:2528::2/64
+ ipv6 enable
+!
+interface Ethernet0/2
+ no ip address
+!
+interface Ethernet0/2.12
+ description Client VLAN 12
+ encapsulation dot1Q 12
+ ip address 192.168.12.1 255.255.255.0
+ ip nat inside
+ ip nat enable
+ ip virtual-reassembly in
+ ip policy route-map rm_TRACKING
+!
+interface Ethernet0/2.22
+ description Client VLAN 22
+ encapsulation dot1Q 22
+ ip address 192.168.22.1 255.255.255.0
+ ip nat inside
+ ip nat enable
+ ip virtual-reassembly in
+ ip policy route-map rm_TRACKING
+!
+interface Ethernet0/2.102
+ description MGMT
+ encapsulation dot1Q 102
+ ip address 10.200.200.193 255.255.255.192
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+router bgp 65028
+ bgp log-neighbor-changes
+ network 10.200.200.28 mask 255.255.255.255
+ network 10.200.200.192 mask 255.255.255.192
+ network 192.168.12.0
+ network 192.168.22.0
+ neighbor 172.16.100.14 remote-as 1001
+ neighbor 172.16.100.15 remote-as 1001
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat inside source route-map rm_NAT_via_e0/0 interface Ethernet0/0 overload
+ip nat inside source route-map rm_NAT_via_e0/1 interface Ethernet0/1 overload
+ip route 0.0.0.0 0.0.0.0 67.73.196.1 10 track 1
+ip route 0.0.0.0 0.0.0.0 8.242.244.1 20 track 2
+!
+ip sla 1
+ icmp-echo 67.73.196.1 source-ip 67.73.196.2
+ frequency 10
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 8.242.244.1 source-ip 8.242.244.2
+ frequency 10
+ip sla schedule 2 life forever start-time now
+!
+route-map rm_NAT_via_e0/1 permit 10
+ match ip address 112 122
+ match interface Ethernet0/1
+ set ip next-hop 67.73.196.1
+!
+route-map rm_NAT_via_e0/0 permit 10
+ match ip address 122 112
+ match interface Ethernet0/0
+ set ip next-hop 8.242.244.1
+!
+route-map rm_TRACKING deny 5
+ match ip address 100
+!
+route-map rm_TRACKING permit 10
+ match ip address 112
+ set ip next-hop verify-availability 67.73.196.1 10 track 1
+ set ip next-hop verify-availability 8.242.244.1 20 track 2
+!
+route-map rm_TRACKING permit 20
+ match ip address 122
+ set ip next-hop verify-availability 8.242.244.1 10 track 2
+ set ip next-hop verify-availability 67.73.196.1 20 track 1
+!
+!
+access-list 100 permit ip object-group og_LAN object-group og_VPN
+access-list 112 permit ip 192.168.12.0 0.0.0.255 any
+access-list 122 permit ip 192.168.22.0 0.0.0.255 any
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd ^CUnauthorized access denied^C
+!
+line con 0
+ password 7 00071A150754
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 13061E010803
+ login
+ transport input none
+!
+ntp update-calendar
+ntp server 209.124.176.1
+event manager applet TR1_Down
+ event track 1 state down
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+event manager applet TR1_Up
+ event track 1 state up
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+event manager applet TR2_Down
+ event track 2 state down
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+event manager applet TR2_Up
+ event track 2 state up
+ action 10 wait 20
+ action 20 cli command "enable"
+ action 30 cli command "clear ip nat translation forced"
+!
+end
