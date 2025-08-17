@@ -339,6 +339,24 @@ R28
 
 !["R28 ping"](./img/r28_ping.png)
 
+#### Просмотр соединений WireShark
+
+##### R14
+
+!["R14 wireshark"](./img/wireshark_r14.png)
+
+##### R15
+
+!["R15 wireshark"](./img/wireshark_r15.png)
+
+##### R18
+
+!["R18 wireshark"](./img/wireshark_r18.png)
+
+##### R27
+
+!["R27 wireshark"](./img/wireshark_r27.png)
+
 </details>
 
 <details>
