@@ -127,3 +127,37 @@ crypto pki trustpoint R20CA
 !["R20CA certificates"](./img/r20_certs.png)
 
 </details>
+
+<details>
+
+<summary><H3>GRE поверх IPSec между офисами Москва и С.-Петербург</H3></summary>
+
+### Настройка IPsec
+
+#### Настройка первой фазы
+
+```
+crypto isakmp policy 10
+ encr aes 256
+ hash sha256
+ group 16
+ lifetime 3600
+!
+```
+
+#### Настройка второй фазы
+
+```
+!
+crypto ipsec transform-set ts_GRE esp-aes esp-sha-hmac
+ mode transport
+!
+!
+crypto ipsec profile pof_GRE
+ set transform-set ts_GRE
+!
+```
+
+####
+
+</details>
