@@ -32,6 +32,8 @@
 В качестве CA-сервера выберем маршрутизатор R20. На маршрутизаторе R20 настроен статический NAT и он доступен по внешнему адресу _128.249.190.3_
 Также на маршрутизаторе R20 уже настроена синхронизация времени по протоколу NTP.
 
+### Настройка центра сертификатов
+
 #### Настройка имени хоста и доменного имени
 
 ```
@@ -73,5 +75,31 @@ crypto pki trustpoint R20CA
 ##### R20CA Server
 
 !["R20CA Server"](./img/r20_CA_server.png)
+
+### Настройка маршрутизаторов R14, R15, R18, R27 и R28 для получения сертификатов от CA
+
+#### Настройка доменного имени, статической записи хост-ip на CA R20 и синхронизация времени по протоколу NTP
+
+```
+ip domain name otus.ru
+ip host R20CA 128.249.190.3
+ip host r20ca.otus.ru 128.249.190.3
+!
+ntp update-calendar
+ntp server 209.124.176.1
+
+```
+
+####
+
+```
+!
+crypto pki trustpoint R20CA
+ enrollment url http://r20ca.otus.ru:80
+ serial-number
+ subject-name CN=R18, O=Otus, C=RU
+ revocation-check crl
+!
+```
 
 </details>
