@@ -122,4 +122,8 @@ crypto pki trustpoint R20CA
 (config)# crypto pki enroll R20CA
 ```
 
+##### Список выданных сертификатов CA сервером
+
+!["R20CA certificates"](./img/r20_certs.png)
+
 </details>
