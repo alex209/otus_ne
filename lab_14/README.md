@@ -132,7 +132,7 @@ crypto pki trustpoint R20CA
 
 <summary><H3>GRE поверх IPSec между офисами Москва и С.-Петербург</H3></summary>
 
-### Настройка IPsec
+### Настройка IPsec на маршрутизаторах R14, R14 и R18
 
 #### Настройка первой фазы
 
@@ -158,6 +158,33 @@ crypto ipsec profile pof_GRE
 !
 ```
 
-####
+#### Применение IPsec профиля на GRE интерфейсах
+
+##### R14
+
+```
+interface Tunnel0
+ tunnel protection ipsec profile pof_GRE
+```
+
+##### R15
+
+```
+interface Tunnel1
+ tunnel protection ipsec profile pof_GRE
+```
+
+##### R18
+
+```
+interface Tunnel0
+ tunnel protection ipsec profile pof_GRE
+!
+interface Tunnel1
+ tunnel protection ipsec profile pof_GRE
+
+```
+
+#### Проверка
 
 </details>
