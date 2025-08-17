@@ -205,4 +205,22 @@ interface Tunnel1
 
 !["R18 tun 1"](./img/r18_int_tun1.png)
 
+#### Состояние IPsec
+
+##### R14 IPsec tun 0
+
+!["R14 IPsec tun 0"](./img/r14_ipsec_tun0.png)
+
+##### R15 IPsec tun 1
+
+!["R15 IPsec tun 1"](./img/r15_ipsec_tun1.png)
+
+##### R18 IPsec tun 0
+
+!["R18 IPsec tun 0"](./img/r18_ipsec_tun0.png)
+
+##### R18 IPsec tun 1
+
+!["R18 IPsec tun 1"](./img/r18_ipsec_tun1.png)
+
 </details>
