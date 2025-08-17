@@ -223,4 +223,120 @@ interface Tunnel1
 
 !["R18 IPsec tun 1"](./img/r18_ipsec_tun1.png)
 
+##### Проверка ping туннельных интерфейсов
+
+!["R18 ping"](./img/r18_ping.png)
+
+</details>
+
+<details>
+
+<summary><H3>DMVPN поверх IPSec между Москва и Чокурдах, Лабытнанги</H3></summary>
+
+### Настройка IPsec на маршрутизаторах R14, R14, R27 и R28
+
+#### Настройка первой фазы
+
+Первую фазу оставляем без изменений
+
+```
+crypto isakmp policy 10
+ encr aes 256
+ hash sha256
+ group 16
+ lifetime 3600
+!
+```
+
+#### Настройка второй фазы
+
+```
+!
+crypto ipsec transform-set ts_DMVPN esp-aes 256 esp-sha256-hmac
+ mode transport
+!
+crypto ipsec profile pof_DMVPN
+ set transform-set ts_DMVPN
+!
+```
+
+#### Применение IPsec профиля на GRE интерфейсах
+
+##### R14
+
+```
+interface Tunnel10
+ tunnel protection ipsec profile pof_DMVPN
+```
+
+##### R15
+
+```
+interface Tunnel10
+ tunnel protection ipsec profile pof_DMVPN
+```
+
+##### R27
+
+```
+interface Tunnel10
+ tunnel protection ipsec profile pof_DMVPN
+```
+
+##### R28
+
+```
+interface Tunnel10
+ tunnel protection ipsec profile pof_DMVPN
+
+```
+
+### Проверка работы DMVPN over IPsec
+
+#### Состояние туннелей DMVPN
+
+##### R14 tun 10
+
+!["R14 tun 10"](./img/r14_int_tun10.png)
+
+##### R15 tun 10
+
+!["R15 tun 10"](./img/r15_int_tun10.png)
+
+##### R27 tun 10
+
+!["R27 tun 10"](./img/r27_int_tun10.png)
+
+##### R28 tun 10
+
+!["R28 tun 10"](./img/r28_int_tun10.png)
+
+#### Состояние IPsec
+
+##### R14 IPsec tun 10
+
+!["R14 IPsec tun 10"](./img/r14_ipsec_tun10.png)
+
+##### R15 IPsec tun 10
+
+!["R15 IPsec tun 10"](./img/r15_ipsec_tun10.png)
+
+##### R27 IPsec tun 10
+
+!["R27 IPsec tun 10"](./img/r27_ipsec_tun10.png)
+
+##### R28 IPsec tun 10
+
+!["R28 IPsec tun 10"](./img/r28_ipsec_tun10.png)
+
+##### Проверка ping туннельных интерфейсов
+
+R27
+
+!["R27 ping"](./img/r27_ping.png)
+
+R28
+
+!["R28 ping"](./img/r28_ping.png)
+
 </details>
