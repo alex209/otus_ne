@@ -1,0 +1,121 @@
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname LTE-R5
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 100.64.0.1 100.64.0.10
+!
+ip dhcp pool LTE1
+ network 100.64.0.0 255.255.255.0
+ default-router 100.64.0.1
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 5.5.5.5 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.5.8.5 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/1
+ ip address 100.64.0.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router bgp 5
+ bgp log-neighbor-changes
+ network 5.5.5.5 mask 255.255.255.255
+ neighbor 10.5.8.8 remote-as 888
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat inside source list 101 interface Ethernet0/0 overload
+!
+!
+!
+access-list 101 permit ip 100.64.0.0 0.0.0.255 any
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

@@ -1,0 +1,137 @@
+!
+! No configuration change since last restart
+! NVRAM config last updated at 17:01:15 UTC Thu Sep 18 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname INET
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 8.8.8.8 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.1.8.8 255.255.255.0
+!
+interface Ethernet0/1
+ ip address 10.2.8.8 255.255.255.0
+!
+interface Ethernet0/2
+ ip address 10.3.8.8 255.255.255.0
+!
+interface Ethernet0/3
+ ip address 10.4.8.8 255.255.255.0
+!
+interface Ethernet1/0
+ ip address 10.5.8.8 255.255.255.0
+!
+interface Ethernet1/1
+ ip address 10.6.8.8 255.255.255.0
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+router bgp 888
+ bgp log-neighbor-changes
+ network 8.8.8.8 mask 255.255.255.255
+ neighbor 10.1.8.1 remote-as 111
+ neighbor 10.1.8.1 default-originate
+ neighbor 10.2.8.2 remote-as 222
+ neighbor 10.2.8.2 default-originate
+ neighbor 10.3.8.3 remote-as 333
+ neighbor 10.3.8.3 default-originate
+ neighbor 10.4.8.4 remote-as 444
+ neighbor 10.4.8.4 default-originate
+ neighbor 10.5.8.5 remote-as 5
+ neighbor 10.5.8.5 default-originate
+ neighbor 10.6.8.6 remote-as 6
+ neighbor 10.6.8.6 default-originate
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+ntp master 2
+!
+end

@@ -1,0 +1,122 @@
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname ISP-R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.2.8.2 255.255.255.0
+!
+interface Ethernet0/1
+ ip address 22.22.22.1 255.255.255.0
+!
+interface Ethernet0/2
+ ip address 12.12.12.1 255.255.255.0
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router bgp 222
+ bgp log-neighbor-changes
+ network 2.2.2.2 mask 255.255.255.255
+ network 12.12.12.0 mask 255.255.255.0
+ network 22.22.22.0 mask 255.255.255.0
+ neighbor 10.2.8.8 remote-as 888
+ neighbor 12.12.12.2 remote-as 12
+ neighbor 12.12.12.2 route-map rm_DEF out
+ neighbor 22.22.22.2 remote-as 12
+ neighbor 22.22.22.2 route-map rm_DEF out
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip prefix-list pl_DEF seq 10 permit 0.0.0.0/0
+!
+route-map rm_DEF permit 10
+ match ip address prefix-list pl_DEF
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+
