@@ -1,0 +1,206 @@
+!
+! Last configuration change at 13:42:11 UTC Sat Sep 20 2025
+! NVRAM config last updated at 13:41:45 UTC Sat Sep 20 2025
+!
+version 17.12
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip host CA 192.168.200.3
+ip host ca.abc.ru 192.168.200.3
+ip domain name abc.ru
+ip cef
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint CA
+ enrollment url http://ca.abc.ru:80
+ serial-number
+ subject-name CN=R1, O=ABC, C=RU
+ revocation-check crl
+ hash sha256
+!
+!
+crypto pki certificate chain CA
+!
+!
+memory free low-watermark processor 81225
+!
+!
+spanning-tree mode rapid-pvst
+!
+!
+!
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ description Primary_TUN
+ bandwidth 10000
+ ip address 172.16.0.1 255.255.255.0
+ no ip redirects
+ ip mtu 1416
+ ip nhrp network-id 100
+ ip ospf network broadcast
+ ip ospf priority 10
+ bfd interval 100 min_rx 100 multiplier 3
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 100
+!
+interface Tunnel1
+ description BackUp_TUN
+ bandwidth 1000
+ ip address 172.16.1.1 255.255.255.0
+ no ip redirects
+ ip mtu 1416
+ ip nhrp network-id 200
+ ip ospf network broadcast
+ ip ospf priority 10
+ bfd interval 200 min_rx 200 multiplier 5
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 200
+!
+interface Ethernet0/0
+ ip address 11.11.11.2 255.255.255.0
+ ip nat outside
+!
+interface Ethernet0/1
+ ip address 12.12.12.2 255.255.255.0
+!
+interface Ethernet0/2
+ ip address 192.168.200.1 255.255.255.0
+ ip nat inside
+!
+interface Ethernet0/3
+ ip address 192.168.100.11 255.255.255.0
+ ip nat inside
+ ip ospf priority 10
+ vrrp 1 ip 192.168.100.1
+ vrrp 1 priority 110
+!
+router ospf 1
+ router-id 1.1.1.1
+ network 172.16.0.0 0.0.0.255 area 0
+ network 172.16.1.0 0.0.0.255 area 0
+ network 192.168.100.0 0.0.0.255 area 0
+ bfd all-interfaces
+!
+router bgp 12
+ bgp log-neighbor-changes
+ neighbor 11.11.11.1 remote-as 111
+ neighbor 12.12.12.1 remote-as 222
+ neighbor 192.168.100.12 remote-as 12
+ !
+ address-family ipv4
+  network 172.16.0.0 mask 255.255.255.0
+  network 172.16.1.0 mask 255.255.255.0
+  network 192.168.100.0
+  network 192.168.200.0
+  neighbor 11.11.11.1 activate
+  neighbor 11.11.11.1 weight 40000
+  neighbor 11.11.11.1 prefix-list pl_RFC_1918 out
+  neighbor 11.11.11.1 filter-list 1 out
+  neighbor 12.12.12.1 activate
+  neighbor 12.12.12.1 prefix-list pl_RFC_1918 out
+  neighbor 12.12.12.1 filter-list 1 out
+  neighbor 192.168.100.12 activate
+  neighbor 192.168.100.12 next-hop-self
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip as-path access-list 1 permit ^$
+!
+ip http server
+ip http secure-server
+ip nat inside source static 192.168.200.3 11.11.11.3
+ip ssh bulk-mode 131072
+!
+!
+ip prefix-list pl_LAN seq 10 permit 192.168.0.0/16 le 32
+ip prefix-list pl_LAN seq 20 permit 172.16.0.0/24
+ip prefix-list pl_LAN seq 30 permit 172.16.1.0/24
+!
+ip prefix-list pl_RFC_1918 seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list pl_RFC_1918 seq 20 deny 172.16.0.0/12 le 32
+ip prefix-list pl_RFC_1918 seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list pl_RFC_1918 seq 40 permit 0.0.0.0/0 le 32
+ip access-list extended 101
+ 10 permit ip 192.168.100.0 0.0.0.255 any
+!
+route-map LOCALPREF permit 10
+ set local-preference 700
+!
+route-map LOCALPREF permit 20
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input ssh
+!
+ntp update-calendar
+ntp server 8.8.8.8
+!
+!
+!
+end
+

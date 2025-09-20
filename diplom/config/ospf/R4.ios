@@ -1,0 +1,157 @@
+!
+! Last configuration change at 13:22:35 UTC Tue Sep 16 2025
+! NVRAM config last updated at 14:21:17 UTC Tue Sep 16 2025
+!
+version 17.12
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip host CA 11.11.11.3
+ip host ca.abc.ru 11.11.11.3
+ip domain name abc.ru
+ip cef
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint CA
+ enrollment url http://ca.abc.ru:80
+ serial-number
+ subject-name CN=R4, O=ABC, C=RU
+ revocation-check crl
+ hash sha256
+!
+!
+!
+memory free low-watermark processor 81225
+!
+!
+spanning-tree mode rapid-pvst
+!
+!
+!
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ no ip address
+ shutdown
+!
+interface Tunnel1
+ bandwidth 1000
+ ip address 172.16.1.4 255.255.255.0
+ no ip redirects
+ ip mtu 1416
+ ip nhrp map 172.16.1.1 11.11.11.2
+ ip nhrp map 172.16.1.2 22.22.22.2
+ ip nhrp map multicast 11.11.11.2
+ ip nhrp map multicast 22.22.22.2
+ ip nhrp network-id 200
+ ip nhrp nhs 172.16.1.1
+ ip nhrp nhs 172.16.1.2
+ ip ospf network broadcast
+ ip ospf priority 0
+ bfd interval 200 min_rx 200 multiplier 5
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 200
+!
+interface Ethernet0/0
+ ip address 44.44.44.2 255.255.255.0
+!
+interface Ethernet0/1
+ ip address 192.168.101.14 255.255.255.0
+ ip nat inside
+ ip ospf 1 area 0
+ vrrp 1 ip 192.168.101.1
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 4.4.4.4
+ network 172.16.1.0 0.0.0.255 area 0
+ network 192.168.101.0 0.0.0.255 area 0
+ bfd all-interfaces
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+ip route 0.0.0.0 0.0.0.0 44.44.44.1
+ip ssh bulk-mode 131072
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input ssh
+!
+ntp update-calendar
+ntp server 8.8.8.8
+!
+!
+!
+end
