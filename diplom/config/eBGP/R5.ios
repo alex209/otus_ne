@@ -144,14 +144,17 @@ router bgp 3456
  address-family ipv4
   network 192.168.102.0
   neighbor 172.16.0.1 activate
+  neighbor 172.16.0.1 weight 4000
   neighbor 172.16.0.1 allowas-in
   neighbor 172.16.0.2 activate
   neighbor 172.16.0.2 allowas-in
   neighbor 172.16.1.1 activate
+  neighbor 172.16.1.1 weight 3000
   neighbor 172.16.1.1 allowas-in
   neighbor 172.16.1.2 activate
   neighbor 172.16.1.2 allowas-in
  exit-address-family
+
 !
 ip forward-protocol nd
 !
