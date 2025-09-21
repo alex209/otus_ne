@@ -1,0 +1,151 @@
+!
+! Last configuration change at 09:24:31 UTC Thu Sep 18 2025
+! NVRAM config last updated at 13:17:55 UTC Thu Sep 18 2025
+!
+version 17.12
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R6
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip host CA 11.11.11.3
+ip host ca.abc.ru 11.11.11.3
+ip domain name abc.ru
+ip cef
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint CA
+ enrollment url http://ca.abc.ru:80
+ serial-number
+ subject-name CN=R6, O=ABC, C=RU
+ revocation-check crl
+ hash sha256
+!
+!
+memory free low-watermark processor 81225
+!
+!
+spanning-tree mode rapid-pvst
+!
+!
+!
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel1
+ ip address 172.16.1.6 255.255.255.0
+ no ip redirects
+ ip nhrp map 172.16.1.1 11.11.11.2
+ ip nhrp map 172.16.1.2 22.22.22.2
+ ip nhrp map multicast 11.11.11.2
+ ip nhrp map multicast 22.22.22.2
+ ip nhrp network-id 200
+ ip nhrp nhs 172.16.1.1
+ ip nhrp nhs 172.16.1.2
+ bfd interval 200 min_rx 200 multiplier 5
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 200
+!
+interface Ethernet0/0
+ ip address dhcp
+!
+interface Ethernet0/1
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ ip address 192.168.103.1 255.255.255.0
+!
+router bgp 12
+ bgp log-neighbor-changes
+ neighbor 172.16.1.1 remote-as 12
+ neighbor 172.16.1.1 fall-over bfd
+ neighbor 172.16.1.2 remote-as 12
+ neighbor 172.16.1.2 fall-over bfd
+ !
+ address-family ipv4
+  network 192.168.103.0
+  neighbor 172.16.1.1 activate
+  neighbor 172.16.1.2 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+ip ssh bulk-mode 131072
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input ssh
+!
+ntp update-calendar
+ntp server 8.8.8.8
+!
+!
+!
+end
