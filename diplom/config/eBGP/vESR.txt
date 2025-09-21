@@ -1,0 +1,126 @@
+hostname R7
+
+ip vrf LTE
+exit
+
+ip bfd neighbor 172.16.0.1
+ip bfd neighbor 172.16.0.2
+ip bfd neighbor 172.16.1.1
+ip bfd neighbor 172.16.1.2
+
+route-map BGP_OUT
+  rule 10
+  exit
+exit
+
+router bgp 3456
+  neighbor 172.16.0.1
+    remote-as 12
+    allow-local-as 2
+    weight 4000
+    ebgp-multihop 5
+    update-source gre 1
+    fall-over bfd
+    address-family ipv4 unicast
+      route-map BGP_OUT out
+      enable
+    exit
+    enable
+  exit
+  neighbor 172.16.0.2
+    remote-as 12
+    allow-local-as 2
+    ebgp-multihop 5
+    update-source gre 1
+    fall-over bfd
+    address-family ipv4 unicast
+      route-map BGP_OUT out
+      enable
+    exit
+    enable
+  exit
+  neighbor 172.16.1.1
+    remote-as 12
+    allow-local-as 2
+    ebgp-multihop 5
+    update-source gre 2
+    fall-over bfd
+    address-family ipv4 unicast
+      route-map BGP_OUT out
+      enable
+    exit
+    enable
+  exit
+  neighbor 172.16.1.2
+    remote-as 12
+    allow-local-as 2
+    ebgp-multihop 5
+    update-source gre 2
+    fall-over bfd
+    address-family ipv4 unicast
+      route-map BGP_OUT out
+      enable
+    exit
+    enable
+  exit
+  address-family ipv4 unicast
+    network 192.168.104.0/24
+  exit
+  enable
+exit
+
+interface gigabitethernet 1/0/1
+  ip firewall disable
+  ip address 192.168.104.1/24
+exit
+interface gigabitethernet 1/0/2
+  description "to_ISP"
+  ip firewall disable
+  ip address 77.77.77.2/24
+exit
+interface gigabitethernet 1/0/3
+  ip vrf forwarding LTE
+  ip firewall disable
+  ip address dhcp
+  ip dhcp client retry 30
+exit
+
+tunnel gre 1
+  description "Primary_TUN"
+  key 100
+  multipoint
+  ip firewall disable
+  local interface gigabitethernet 1/0/2
+  ip address 172.16.0.7/24
+  ip bfd min-rx-interval 300
+  ip bfd min-tx-interval 300
+  ip bfd multiplier 3
+  ip nhrp map 172.16.0.1 11.11.11.2
+  ip nhrp map 172.16.0.2 22.22.22.2
+  ip nhrp nhs 172.16.0.1
+  ip nhrp nhs 172.16.0.2
+  ip nhrp multicast nhs
+  ip nhrp enable
+  enable
+exit
+tunnel gre 2
+  description "BackUp_TUN"
+  key 200
+  multipoint
+  ip firewall disable
+  tunnel-source vrf LTE
+  local interface gigabitethernet 1/0/3
+  ip address 172.16.1.7/24
+  ip bfd min-rx-interval 500
+  ip bfd min-tx-interval 500
+  ip bfd multiplier 5
+  ip nhrp map 172.16.1.1 11.11.11.2
+  ip nhrp map 172.16.1.2 22.22.22.2
+  ip nhrp nhs 172.16.1.1
+  ip nhrp nhs 172.16.1.2
+  ip nhrp multicast nhs
+  ip nhrp enable
+  enable
+exit
+
+ip route 0.0.0.0/0 77.77.77.1

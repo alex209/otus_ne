@@ -1,0 +1,163 @@
+!
+! No configuration change since last restart
+!
+version 17.12
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip host CA 11.11.11.3
+ip host ca.abc.ru 11.11.11.3
+ip domain name abc.ru
+ip cef
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint CA
+ enrollment url http://ca.abc.ru:80
+ serial-number
+ subject-name CN=R4, O=ABC, C=RU
+ revocation-check crl
+ hash sha256
+!
+!
+!
+memory free low-watermark processor 81225
+!
+!
+spanning-tree mode rapid-pvst
+!
+!
+!
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ no ip address
+ shutdown
+!
+interface Tunnel1
+ ip address 172.16.1.4 255.255.255.0
+ no ip redirects
+ ip nhrp map 172.16.1.1 11.11.11.2
+ ip nhrp map 172.16.1.2 22.22.22.2
+ ip nhrp map multicast 11.11.11.2
+ ip nhrp map multicast 22.22.22.2
+ ip nhrp network-id 200
+ ip nhrp nhs 172.16.1.1
+ ip nhrp nhs 172.16.1.2
+ bfd interval 200 min_rx 200 multiplier 5
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ tunnel key 200
+!
+interface Ethernet0/0
+ ip address 44.44.44.2 255.255.255.0
+!
+interface Ethernet0/1
+ ip address 192.168.101.14 255.255.255.0
+ ip nat inside
+ vrrp 1 ip 192.168.101.1
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router bgp 3456
+ bgp log-neighbor-changes
+ neighbor 172.16.1.1 remote-as 12
+ neighbor 172.16.1.1 fall-over bfd
+ neighbor 172.16.1.2 remote-as 12
+ neighbor 172.16.1.2 fall-over bfd
+ neighbor 192.168.101.13 remote-as 3456
+ !
+ address-family ipv4
+  network 192.168.101.0
+  neighbor 172.16.1.1 activate
+  neighbor 172.16.1.1 allowas-in
+  neighbor 172.16.1.2 activate
+  neighbor 172.16.1.2 allowas-in
+  neighbor 192.168.101.13 activate
+  neighbor 192.168.101.13 next-hop-self
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+ip route 0.0.0.0 0.0.0.0 44.44.44.1
+ip ssh bulk-mode 131072
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input ssh
+!
+ntp update-calendar
+ntp server 8.8.8.8
+!
+!
+!
+end
